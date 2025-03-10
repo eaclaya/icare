@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\HasApiActions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Family extends Model
 {
+    use HasApiActions;
+
     protected $fillable = ['name', 'type', 'structure', 'data'];
 
     protected $casts = [

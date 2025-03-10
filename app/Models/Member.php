@@ -10,7 +10,6 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class Member extends Model
 {
-
     use HasRolesAndAbilities;
 
     protected $fillable = [

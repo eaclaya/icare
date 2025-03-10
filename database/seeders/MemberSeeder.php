@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Church;
+
 use App\Models\Location;
 use App\Models\Member;
 use App\Models\Role;
@@ -20,7 +20,6 @@ class MemberSeeder extends Seeder
     {
         $data = [];
         $faker = Faker::create();
-        $churches = Church::pluck('id');
         $locations = Location::pluck('id');
         $lastMember = Member::orderBy('id', 'desc')->first();
         $roles = Role::pluck('name');
@@ -35,7 +34,7 @@ class MemberSeeder extends Seeder
             'https://www.aidemos.info/wp-content/uploads/2023/05/An_avatar_of_a_smart_man_with_glasses_and_a_mustache_w_5c41acac-d69c-4981-987d-7321c3b5ca5f.webp',
         ];
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $row = [
                 'first_name' => $faker->firstName,
                 'last_name' => $faker->lastName,
@@ -53,29 +52,12 @@ class MemberSeeder extends Seeder
 
         DB::table('members')->insert($data);
 
-        $churchMembers = Member::query()
-            ->select('id', 'email', 'first_name', 'last_name')
-            ->when($lastMember, function ($query) use ($lastMember) {
-                $query->where('id', '>', $lastMember->id);
-            })
-            ->get()
-            ->map(function ($member) use ($churches, $faker) {
-                return [
-                    'member_id' => $member->id,
-                    'church_id' => $faker->randomElement($churches),
-                    'church_type' => $faker->randomElement([
-                        'Home Church',
-                        'Serving Church',
-                        'Other',
-                    ]),
-                ];
-            });
         $members = Member::when($lastMember, function ($query) use ($lastMember) {
-                $query->where('id','>', $lastMember->id);
-            })
+            $query->where('id', '>', $lastMember->id);
+        })
             ->get();
 
-        DB::table('church_member')->insert($churchMembers->toArray());
+
         foreach ($members as $member) {
             Bouncer::assign($faker->randomElement($roles))->to($member);
         }

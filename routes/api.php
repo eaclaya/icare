@@ -3,12 +3,12 @@
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\BroadcastController;
 use App\Http\Controllers\Api\V1\ChurchController;
+use App\Http\Controllers\Api\V1\CommunityController;
 use App\Http\Controllers\Api\V1\EventController;
 use App\Http\Controllers\Api\V1\MemberController;
 use App\Http\Controllers\Api\V1\MemberPermission;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\ChatController;
-use App\Http\Middleware\ScopeBouncer;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -24,6 +24,8 @@ Route::prefix('v1')->middleware([
             Route::resource('/members', MemberController::class);
             Route::resource('/events', EventController::class);
             Route::resource('/churches', ChurchController::class);
+            Route::resource('/communities', CommunityController::class);
+
             Route::post('/chats/{chat}/message', [ChatController::class, 'saveChatMessage'])->name('chats.message');
             Route::resource('/chats', ChatController::class);
             Route::resource('/users', UserController::class);

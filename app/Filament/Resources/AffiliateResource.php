@@ -4,8 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AffiliateResource\Pages;
 use App\Models\Affiliate;
-use App\Models\Church;
-use App\Models\Community;
 use App\Models\Family;
 use App\Models\User;
 use Filament\Forms;
@@ -72,12 +70,6 @@ class AffiliateResource extends Resource
     public static function table(Table $table): Table
     {
 
-        tenancy()->find('p686')->run(function($affiliate) {
-            $user = User::orderBy('id')->first();
-            $families = Family::all()->filter(fn ($family) => $family->id % 2 === 0);
-            $user->member->families()->sync($families);
-            Bouncer::allow($user)->to('edit families', $families->first());
-        });
         return $table
             ->columns([
                 // Name (ID)

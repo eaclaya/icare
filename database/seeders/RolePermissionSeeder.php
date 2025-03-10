@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Silber\Bouncer\BouncerFacade as Bouncer;
-use App\Models\User;
 use App\Models\Community;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -38,8 +38,7 @@ class RolePermissionSeeder extends Seeder
 
         // Create Abilities (Permissions)
         $resources = [
-            'affiliates', 'volunteers', 'advocates', 'families',
-            'communities', 'events', 'churches', 'fams'
+            'affiliates', 'families', 'communities', 'events', 'churches',
         ];
 
         foreach ($resources as $resource) {

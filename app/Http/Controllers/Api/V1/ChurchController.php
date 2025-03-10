@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ChurchResource;
 use App\Models\Church;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Typesense\Client as TypesenseClient;
 
 class ChurchController extends Controller
@@ -22,14 +21,14 @@ class ChurchController extends Controller
     {
         $user = auth()->user();
 
-        $query = Church::withCount(["members", "families"])
+        $query = Church::withCount(['members', 'families'])
             ->with(['location'])
             ->when($request->q, function ($query) use ($request) {
-                $query->whereLike("name",  "%{$request->q}%");
+                $query->whereLike('name', "%{$request->q}%");
             });
 
         // Check if the user has access to view all churches
-        if (!$user->can('view churches')) {
+        if (! $user->can('view churches')) {
             $churchIds = $user->churches->filter(function ($church) use ($user) {
                 return $user->can('view churches', $church);
             })->pluck('id');
@@ -37,8 +36,7 @@ class ChurchController extends Controller
             $query = $query->whereIn('id', $churchIds);
         }
 
-
-        $churches = $query->orderBy("id", "asc")->paginate(50);
+        $churches = $query->orderBy('id', 'asc')->paginate(50);
 
         return ChurchResource::collection($churches);
 

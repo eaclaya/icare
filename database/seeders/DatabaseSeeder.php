@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
                 FamilySeeder::class,
                 CommunitySeeder::class,
                 MemberSeeder::class,
+                ChurchMemberSeeder::class,
+                CommunityMemberSeeder::class,
                 UserSeeder::class,
                 EventSeeder::class,
             ]);

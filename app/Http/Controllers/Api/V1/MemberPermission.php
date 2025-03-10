@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Member;
-use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Silber\Bouncer\Database\Ability;
 
 class MemberPermission extends Controller
 {
@@ -41,8 +38,7 @@ class MemberPermission extends Controller
             // Scoped Access
             $scopedAccess = [];
 
-            if ($instances = $user->getRelationValue($resource))
-            {
+            if ($instances = $user->getRelationValue($resource)) {
                 foreach ($instances as $instance) {
                     $instancePermissions = [];
                     $entityId = $instance->id;
@@ -59,12 +55,11 @@ class MemberPermission extends Controller
                         'entity_id' => $entityId,
                         'entity_type' => $entity_type,
                         'permissions' => $instancePermissions,
-                        'actions' => $this->getFormattedActions($actions, $instancePermissions)
+                        'actions' => $this->getFormattedActions($actions, $instancePermissions),
                     ];
 
                 }
             }
-
 
             // Add to permissions array
             $permissions[$resource] = [
@@ -90,6 +85,7 @@ class MemberPermission extends Controller
                 $actions = $actions->map(function ($action) use ($resource) {
                     $action['entity_id'] = $resource['entity_id'];
                     $action['entity_type'] = $resource['entity_type'];
+
                     return $action;
                 })->toArray();
 
@@ -98,7 +94,7 @@ class MemberPermission extends Controller
 
             $updatedPermissions[$key] = [
                 'global' => $globalPermissions,
-                'scoped' =>  $scopedPermissions
+                'scoped' => $scopedPermissions,
             ];
         }
 
@@ -126,7 +122,6 @@ class MemberPermission extends Controller
         }
     }
 
-
     protected function getFormattedActions($actions, $permissions)
     {
         $result = [];
@@ -134,9 +129,10 @@ class MemberPermission extends Controller
             $result[$action] = [
                 'id' => $action,
                 'name' => Str::title($action),
-                'enabled' => in_array($action, $permissions)
+                'enabled' => in_array($action, $permissions),
             ];
         }
+
         return $result;
     }
 }

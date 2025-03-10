@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ChurchResource extends JsonResource
+class CommunityResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,8 +18,7 @@ class ChurchResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'location' => $this->location,
-            'families_count' => $this->families_count,
-            'communities_count' => $this->communities_count,
+            'members_count' => $this->members_count,
             'actions' => $this->getActions(),
         ];
     }
