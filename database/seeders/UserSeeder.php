@@ -6,9 +6,8 @@ use App\Models\Church;
 use App\Models\Member;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
@@ -30,12 +29,13 @@ class UserSeeder extends Seeder
                 if (isset($churches[$member->id]) === false) {
                     $churches[$member->id] = [];
                 }
-                $churches[$member->id] = $member->churches->map( fn ($church) => ['church_id' => $church->id, 'church_type' => $church->church_type])->toArray();
+                $churches[$member->id] = $member->churches->map(fn ($church) => ['church_id' => $church->id, 'church_type' => $church->church_type])->toArray();
+
                 return [
-                    'member_id'=> $member->id,
+                    'member_id' => $member->id,
                     'name' => "{$member->first_name} {$member->last_name}",
-                    'email'=> $member->email,
-                    'password' => '$2y$12$eo/yY.R4V7hbdB.kwawQ5eUVC1DxTjjPOlsvEYsaxijWSfDWtPtne' //password
+                    'email' => $member->email,
+                    'password' => '$2y$12$eo/yY.R4V7hbdB.kwawQ5eUVC1DxTjjPOlsvEYsaxijWSfDWtPtne', // password
                 ];
             });
 

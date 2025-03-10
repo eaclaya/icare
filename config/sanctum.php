@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\InitializeTenantByDomainOrHeader;
 use Laravel\Sanctum\Sanctum;
 
 return [

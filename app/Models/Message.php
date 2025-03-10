@@ -10,7 +10,6 @@ class Message extends Model
 {
     protected $fillable = ['user_id', 'content'];
 
-
     public function messageable(): MorphTo
     {
         return $this->morphTo();

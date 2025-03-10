@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class FamilyMember extends Model
 {
-    protected $table = "family_member";
+    protected $table = 'family_member';
 }

@@ -13,6 +13,7 @@ class BroadcastController extends Controller
         if ($request->hasSession()) {
             $request->session()->reflash();
         }
+
         return Broadcast::auth($request);
     }
 }

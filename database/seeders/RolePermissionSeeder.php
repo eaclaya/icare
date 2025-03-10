@@ -2,91 +2,101 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Silber\Bouncer\BouncerFacade as Bouncer;
+use App\Models\User;
+use App\Models\Community;
+use Illuminate\Database\Seeder;
 
 class RolePermissionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        \DB::table('abilities')->delete();
-        \DB::table('roles')->delete();
+        // Clear existing roles and abilities
+        Bouncer::role()->query()->delete();
+        Bouncer::ability()->query()->delete();
 
-        // Create roles
-        $admin = Bouncer::role()->firstOrCreate([
+        // Create Roles
+        $superadmin = Bouncer::role()->create([
+            'name' => 'superadmin',
+            'title' => 'Super Administrator',
+        ]);
+
+        $admin = Bouncer::role()->create([
             'name' => 'admin',
             'title' => 'Administrator',
         ]);
 
-        $churchManager = Bouncer::role()->firstOrCreate([
-            'name' => 'church_manager',
-            'title' => 'Church Manager',
+        $manager = Bouncer::role()->create([
+            'name' => 'manager',
+            'title' => 'Manager',
         ]);
 
-        $familyManager = Bouncer::role()->firstOrCreate([
-            'name' => 'family_manager',
-            'title' => 'Family Manager',
+        $member = Bouncer::role()->create([
+            'name' => 'member',
+            'title' => 'Member',
         ]);
 
-        $communityManager = Bouncer::role()->firstOrCreate([
-            'name' => 'community_manager',
-            'title' => 'Community Manager',
-        ]);
+        // Create Abilities (Permissions)
+        $resources = [
+            'affiliates', 'volunteers', 'advocates', 'families',
+            'communities', 'events', 'churches', 'fams'
+        ];
 
-        // Create abilities
-        $manageFamilies = Bouncer::ability()->firstOrCreate([
-            'name' => 'manage-families',
-            'title' => 'Manage Families',
-        ]);
+        foreach ($resources as $resource) {
+            Bouncer::ability()->create(['name' => "create {$resource}"]);
+            Bouncer::ability()->create(['name' => "view {$resource}"]);
+            Bouncer::ability()->create(['name' => "edit {$resource}"]);
+            Bouncer::ability()->create(['name' => "delete {$resource}"]);
+        }
 
-        $manageCommunities = Bouncer::ability()->firstOrCreate([
-            'name' => 'manage-communities',
-            'title' => 'Manage Communities',
-        ]);
+        // Assign Abilities to Roles
+        // Superadmin has all abilities
+        Bouncer::allow('superadmin')->to('*');
 
-        $manageChurches = Bouncer::ability()->firstOrCreate([
-            'name' => 'manage-churches',
-            'title' => 'Manage Churches',
-        ]);
+        // Admin has all abilities except for affiliates
+        foreach ($resources as $resource) {
+            if ($resource !== 'affiliates') {
+                Bouncer::allow('admin')->to("create {$resource}");
+                Bouncer::allow('admin')->to("view {$resource}");
+                Bouncer::allow('admin')->to("edit {$resource}");
+                Bouncer::allow('admin')->to("delete {$resource}");
+            }
+        }
 
-        $manageMembers = Bouncer::ability()->firstOrCreate([
-            'name' => 'manage-members',
-            'title' => 'Manage Members',
-        ]);
+        // Manager has limited abilities
+        foreach ($resources as $resource) {
+            if ($resource !== 'affiliates') {
+                Bouncer::allow('manager')->to("create {$resource}");
+                Bouncer::allow('manager')->to("view {$resource}");
+                Bouncer::allow('manager')->to("edit {$resource}");
+                if ($resource !== 'churches' && $resource !== 'fams') {
+                    Bouncer::allow('manager')->to("delete {$resource}");
+                }
+            }
+        }
 
-        $editChurch = Bouncer::ability()->firstOrCreate([
-            'name' => 'edit-church',
-            'title' => 'Edit Church',
-        ]);
+        // Member has limited abilities
+        Bouncer::allow('member')->to('view volunteers');
+        Bouncer::allow('member')->to('view advocates');
+        Bouncer::allow('member')->to('create events');
+        Bouncer::allow('member')->to('view events');
 
-        $deleteChurch = Bouncer::ability()->firstOrCreate([
-            'name' => 'delete-church',
-            'title' => 'Delete Church',
-        ]);
+        // // Assign Roles to Users (Example)
+        // $user1 = User::find(1); // Example user
+        // Bouncer::assign('Superadmin')->to($user1);
 
-        // Assign abilities to roles
-        // Admin has access to everything
-        Bouncer::allow($admin)->everything();
+        // $user2 = User::find(2); // Example user
+        // Bouncer::assign('Member')->to($user2);
 
-        // Church Manager has access to everything except editing/deleting a church
-        Bouncer::allow($churchManager)->to($manageFamilies);
-        Bouncer::allow($churchManager)->to($manageCommunities);
-        Bouncer::allow($churchManager)->to($manageChurches);
-        Bouncer::allow($churchManager)->to($manageMembers);
-        Bouncer::forbid($churchManager)->to($editChurch);
-        Bouncer::forbid($churchManager)->to($deleteChurch);
+        // // Assign Scoped Permissions (Example)
+        // $community1 = Community::find(1);
+        // $community2 = Community::find(2);
 
-        // Family Manager has access to their family and members
-        Bouncer::allow($familyManager)->to($manageFamilies);
-        Bouncer::allow($familyManager)->to($manageMembers);
+        // // User 2 has scoped permissions for Community 1
+        // Bouncer::allow($user2)->to('view communities', $community1);
+        // Bouncer::allow($user2)->to('edit communities', $community1);
 
-        // Community Manager has access to their community and the family linked to it
-        Bouncer::allow($communityManager)->to($manageCommunities);
-        Bouncer::allow($communityManager)->to($manageFamilies);
+        // // User 2 has scoped permissions for Community 2
+        // Bouncer::allow($user2)->to('view communities', $community2);
     }
 }

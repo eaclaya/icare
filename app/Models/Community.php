@@ -9,17 +9,17 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Community extends Model
 {
     protected $fillable = [
-        "name",
-        "description",
-        "type",
-        "family_id",
-        "location_id",
-        "data",
+        'name',
+        'description',
+        'type',
+        'family_id',
+        'location_id',
+        'data',
     ];
 
     public function eventLinks(): MorphMany
     {
-        return $this->morphMany(EventLink::class, "linkable");
+        return $this->morphMany(EventLink::class, 'linkable');
     }
 
     public function members(): BelongsToMany

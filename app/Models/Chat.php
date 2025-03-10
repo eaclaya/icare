@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Chat extends Model
 {
-    protected $fillable = ["name", "is_group"];
+    protected $fillable = ['name', 'is_group'];
 
     public function users(): BelongsToMany
     {
@@ -17,7 +17,6 @@ class Chat extends Model
 
     public function messages(): MorphMany
     {
-        return $this->morphMany(Message::class,"messageable");
+        return $this->morphMany(Message::class, 'messageable');
     }
-
 }

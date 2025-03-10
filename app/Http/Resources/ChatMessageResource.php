@@ -19,7 +19,7 @@ class ChatMessageResource extends JsonResource
             'chat_id' => $this->messageable_id,
             'content' => $this->content,
             'user' => $this->user,
-            'created_at'=> $this->created_at,
+            'created_at' => $this->created_at,
 
         ];
     }

@@ -11,21 +11,21 @@ class TypesenseServiceProvider extends ServiceProvider
     {
         $this->app->singleton(TypesenseClient::class, function () {
             return new TypesenseClient([
-                "api_key" => config("services.typesense.api_key"),
-                "nodes" => [
+                'api_key' => config('services.typesense.api_key'),
+                'nodes' => [
                     [
-                        "host" => config(
-                            "services.typesense.host",
-                            "localhost"
+                        'host' => config(
+                            'services.typesense.host',
+                            'localhost'
                         ),
-                        "port" => config("services.typesense.port", "8108"),
-                        "protocol" => config(
-                            "services.typesense.protocol",
-                            "http"
+                        'port' => config('services.typesense.port', '8108'),
+                        'protocol' => config(
+                            'services.typesense.protocol',
+                            'http'
                         ),
                     ],
                 ],
-                "connection_timeout_seconds" => 2,
+                'connection_timeout_seconds' => 2,
             ]);
         });
     }

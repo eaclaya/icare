@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Church;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ChurchMemberRoleSeeder extends Seeder
@@ -15,8 +14,7 @@ class ChurchMemberRoleSeeder extends Seeder
     public function run(): void
     {
         $users = User::all();
-        $churches = Church::pluck("id");
-        foreach ($users as $user) {
+        $churches = Church::pluck('id');
 
     }
 }

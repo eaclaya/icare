@@ -17,14 +17,14 @@ class TypesenseChurchSync extends Command
      *
      * @var string
      */
-    protected $signature = "typesense:churches";
+    protected $signature = 'typesense:churches';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = "Command description";
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
@@ -35,8 +35,8 @@ class TypesenseChurchSync extends Command
         $schema = MongoDBChurch::getSchema();
 
         $collections = collect($client->collections->retrieve());
-        $collection = $collections->first(fn($c) => $c["name"] === "churches");
-        if (!$collection) {
+        $collection = $collections->first(fn ($c) => $c['name'] === 'churches');
+        if (! $collection) {
             $client->collections->create($schema);
         }
 
@@ -45,13 +45,13 @@ class TypesenseChurchSync extends Command
             $affiliate->run(function (Affiliate $affiliate) use ($client) {
                 Church::chunk(100, function ($churches) use ($client) {
                     $documents = $churches
-                        ->map(fn($church) => $church->toSearchableArray())
+                        ->map(fn ($church) => $church->toSearchableArray())
                         ->toArray();
 
                     $response = $client->collections[
-                        "churches"
+                        'churches'
                     ]->documents->import($documents, [
-                        "action" => "upsert",
+                        'action' => 'upsert',
                     ]);
                 });
             });

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ChurchResource;
 use App\Models\Church;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Typesense\Client as TypesenseClient;
 
 class ChurchController extends Controller
@@ -18,56 +20,71 @@ class ChurchController extends Controller
 
     public function index(Request $request)
     {
-        // $churches = Church::withCount(["members", "families"])
-        //     ->when($request->q, function ($query) use ($request) {
-        //         $query->where("name", "ILIKE", "%{$request->q}%");
-        //     })
-        //     ->orderBy("id", "asc")
-        //     ->paginate(50);
+        $user = auth()->user();
 
-        // return response()->json($churches);
+        $query = Church::withCount(["members", "families"])
+            ->with(['location'])
+            ->when($request->q, function ($query) use ($request) {
+                $query->whereLike("name",  "%{$request->q}%");
+            });
 
-        $searchParameters = [
-            "q" => $request->q ? $request->q : "*",
-            "query_by" => "name,city",
-            "page" => $request->page ? $request->page : 1,
-            "per_page" => 50,
-        ];
-        if ($request->location) {
-            $searchParameters[
-                "filter_by"
-            ] = "location:({$request->location["lat"]}, {$request->location["lng"]}, {$request->distance} km)";
+        // Check if the user has access to view all churches
+        if (!$user->can('view churches')) {
+            $churchIds = $user->churches->filter(function ($church) use ($user) {
+                return $user->can('view churches', $church);
+            })->pluck('id');
+
+            $query = $query->whereIn('id', $churchIds);
         }
 
-        $churches = $this->typesense->collections[
-            "churches"
-        ]->documents->search($searchParameters);
 
-        return response()->json([
-            "data" => data_get($churches, "hits.*.document"),
-        ]);
+        $churches = $query->orderBy("id", "asc")->paginate(50);
+
+        return ChurchResource::collection($churches);
+
+        // TYPESENSE TEST: ENABLE THIS IF YOU WANT TO COMPARE RESPONSE TIMES VS ELOQUENT
+
+        // $searchParameters = [
+        //     'q' => $request->q ? $request->q : '*',
+        //     'query_by' => 'name,city',
+        //     'page' => $request->page ? $request->page : 1,
+        //     'per_page' => 50,
+        // ];
+        // if ($request->location) {
+        //     $searchParameters[
+        //         'filter_by'
+        //     ] = "location:({$request->location['lat']}, {$request->location['lng']}, {$request->distance} km)";
+        // }
+
+        // $churches = $this->typesense->collections[
+        //     'churches'
+        // ]->documents->search($searchParameters);
+
+        // return response()->json([
+        //     'data' => data_get($churches, 'hits.*.document'),
+        // ]);
     }
 
     public function match(Request $request)
     {
         $data = $request->validate([
-            "name" => ["required", "string"],
-            "street_1" => ["required", "string"],
-            "state" => ["required", "string"],
-            "city" => ["required", "string"],
-            "zip" => ["required", "string"],
-            "lat" => ["required", "numeric"],
-            "lng" => ["required", "numeric"],
+            'name' => ['required', 'string'],
+            'street_1' => ['required', 'string'],
+            'state' => ['required', 'string'],
+            'city' => ['required', 'string'],
+            'zip' => ['required', 'string'],
+            'lat' => ['required', 'numeric'],
+            'lng' => ['required', 'numeric'],
         ]);
 
-        $latitude = $request->input("latitude");
-        $longitude = $request->input("longitude");
-        $name = $request->input("name");
+        $latitude = $request->input('latitude');
+        $longitude = $request->input('longitude');
+        $name = $request->input('name');
 
-        $churches = Church::where("location", "near", [
+        $churches = Church::where('location', 'near', [
             '$geometry' => [
-                "type" => "Point",
-                "coordinates" => [$longitude, $latitude],
+                'type' => 'Point',
+                'coordinates' => [$longitude, $latitude],
             ],
             '$maxDistance' => 50000,
         ])->get();

@@ -23,9 +23,10 @@ class ChatResource extends JsonResource
 
     protected function getChatName(): string
     {
-        if (!$this->is_group) {
+        if (! $this->is_group) {
             return $this->users->first(fn ($user) => $user->id != auth()->id())->name;
         }
+
         return $this->name;
     }
 

@@ -4,9 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Church;
 use App\Models\Location;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
 
 class ChurchSeeder extends Seeder
 {
@@ -17,15 +16,15 @@ class ChurchSeeder extends Seeder
     {
         $data = [];
         $faker = Faker::create();
-        $locations = Location::pluck("id");
+        $locations = Location::pluck('id');
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
-                "name" => $faker->company,
-                "nickname" => $faker->company,
-                "campus_name" => $faker->company,
-                "location_id" => $faker->randomElement($locations),
-                "created_at" => now(),
-                "updated_at" => now(),
+                'name' => $faker->company,
+                'nickname' => $faker->company,
+                'campus_name' => $faker->company,
+                'location_id' => $faker->randomElement($locations),
+                'created_at' => now(),
+                'updated_at' => now(),
             ];
         }
 

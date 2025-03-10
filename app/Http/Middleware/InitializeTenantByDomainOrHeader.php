@@ -12,6 +12,7 @@ use Stancl\Tenancy\Tenancy;
 class InitializeTenantByDomainOrHeader
 {
     protected $tenancy;
+
     protected $tenantResolver;
 
     public function __construct(
@@ -32,13 +33,13 @@ class InitializeTenantByDomainOrHeader
         $affiliate = null;
 
         // If tenant is not resolved by domain, try resolving by request header
-        if ($request->hasHeader("X-Affiliate")) {
-            $affiliateId = $request->header("X-Affiliate");
-            $affiliate = Affiliate::where("id", $affiliateId)->first();
+        if ($request->hasHeader('X-Affiliate')) {
+            $affiliateId = $request->header('X-Affiliate');
+            $affiliate = Affiliate::where('id', $affiliateId)->first();
         }
 
         // Fallback to resolve the tenant by domain
-        if (!$affiliate) {
+        if (! $affiliate) {
             $affiliate = $this->tenantResolver->resolve($request->getHost());
         }
 

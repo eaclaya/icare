@@ -5,14 +5,11 @@ namespace App\Http\Controllers;
 use App\Events\NewChatMessage;
 use App\Http\Requests\ChatMessageStoreRequest;
 use App\Http\Requests\ChatStoreRequest;
+use App\Http\Requests\ChatUpdateRequest;
 use App\Http\Resources\ChatMessageResource;
 use App\Http\Resources\ChatResource;
-use App\Http\Requests\ChatUpdateRequest;
 use App\Models\Chat;
 use App\Models\Message;
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
@@ -21,7 +18,7 @@ class ChatController extends Controller
         $chats = auth()
             ->user()
             ->chats()
-            ->with(["users.profile"])
+            ->with(['users.profile'])
             ->paginate(20);
 
         return ChatResource::collection($chats);
@@ -33,6 +30,7 @@ class ChatController extends Controller
         $chat = Chat::create($request->all());
         $users = array_unique([...$request->users, auth()->id()]);
         $chat->users()->attach($users);
+
         return new ChatResource($chat);
     }
 
@@ -42,6 +40,7 @@ class ChatController extends Controller
             ->where('messageable_id', $chat->id)
             ->where('messageable_type', Chat::class)
             ->paginate(20);
+
         return ChatMessageResource::collection($messages);
     }
 
@@ -54,7 +53,7 @@ class ChatController extends Controller
     {
         $data = [
             'user_id' => auth()->id(),
-            ...$request->all()
+            ...$request->all(),
         ];
 
         $message = $chat->messages()->create($data);

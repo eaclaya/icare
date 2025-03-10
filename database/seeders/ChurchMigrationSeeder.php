@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Affiliate;
-use Illuminate\Database\Seeder;
 use App\Models\Church;
+use Illuminate\Database\Seeder;
 use MongoDB\Client as MongoClient;
 
 class ChurchMigrationSeeder extends Seeder
@@ -33,7 +33,7 @@ class ChurchMigrationSeeder extends Seeder
         $affiliates = Affiliate::all();
 
         foreach ($affiliates as $affiliate) {
-            $affiliate->run(function ($affiliate) use ($churchesCollection, $mongoDB) {
+            $affiliate->run(function ($affiliate) use ($churchesCollection) {
                 Church::chunk(1000, function ($churches) use ($churchesCollection, $affiliate) {
                     $churchesBulk = [];
                     foreach ($churches as $church) {
@@ -62,13 +62,13 @@ class ChurchMigrationSeeder extends Seeder
                             'updateOne' => [
                                 ['_id' => $mongoId], // Find by unique key
                                 ['$set' => $document],
-                                ['upsert' => true] // Insert if not exists, update if exists
-                            ]
+                                ['upsert' => true], // Insert if not exists, update if exists
+                            ],
                         ];
                     }
 
                     // Perform bulk update in MongoDB
-                    if (!empty($churchesBulk)) {
+                    if (! empty($churchesBulk)) {
                         $churchesCollection->bulkWrite($churchesBulk);
                     }
 

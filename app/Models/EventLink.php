@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class EventLink extends Model
 {
-
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);

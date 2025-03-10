@@ -1,18 +1,21 @@
 <?php
+
 namespace App\Filament\Resources;
 
-use App\Events\NewChatMessage;
 use App\Filament\Resources\AffiliateResource\Pages;
 use App\Models\Affiliate;
-use App\Models\Message;
+use App\Models\Church;
+use App\Models\Community;
+use App\Models\Family;
+use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Validation\Rule;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
+use Filament\Tables\Table;
+use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class AffiliateResource extends Resource
 {
@@ -69,6 +72,12 @@ class AffiliateResource extends Resource
     public static function table(Table $table): Table
     {
 
+        tenancy()->find('p686')->run(function($affiliate) {
+            $user = User::orderBy('id')->first();
+            $families = Family::all()->filter(fn ($family) => $family->id % 2 === 0);
+            $user->member->families()->sync($families);
+            Bouncer::allow($user)->to('edit families', $families->first());
+        });
         return $table
             ->columns([
                 // Name (ID)

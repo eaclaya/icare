@@ -4,9 +4,7 @@ namespace App\Filament\Resources\AffiliateResource\Pages;
 
 use App\Filament\Resources\AffiliateResource;
 use App\Models\Member;
-use App\Models\Store;
 use App\Models\User;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateAffiliate extends CreateRecord
@@ -16,7 +14,8 @@ class CreateAffiliate extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['id'] = strtolower($data['subdomain']);
-        $data['domain'] = $data['subdomain'] . '.' . env('CENTRAL_DOMAIN');
+        $data['domain'] = $data['subdomain'].'.'.env('CENTRAL_DOMAIN');
+
         return $data;
     }
 

@@ -23,7 +23,7 @@ class ChatStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255'],
-            'users.*' => ['required', 'exists:users,id']
+            'users.*' => ['required', 'exists:users,id'],
         ];
     }
 }

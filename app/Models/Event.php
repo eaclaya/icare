@@ -9,21 +9,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Event extends Model
 {
     protected $fillable = [
-        "name",
-        "user_id",
-        "type",
-        "description",
-        "location",
-        "contact_name",
-        "contact_phone",
-        "timezone",
-        "max_size",
-        "location_id",
-        "data",
+        'name',
+        'user_id',
+        'type',
+        'description',
+        'location',
+        'contact_name',
+        'contact_phone',
+        'timezone',
+        'max_size',
+        'location_id',
+        'data',
     ];
 
     protected $casts = [
-        "data" => "json",
+        'data' => 'json',
     ];
 
     public function links(): HasMany

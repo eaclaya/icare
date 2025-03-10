@@ -9,17 +9,15 @@ use App\Models\Event;
 use App\Models\Family;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
     public function index(Request $request)
     {
-        $user = User::first()->load("churches", "families", "communities");
-        $churches = $user->churches->pluck("name", "id");
-        $families = $user->families->pluck("name", "id");
-        $communities = $user->communities->pluck("name", "id");
+        $user = User::first()->load('churches', 'families', 'communities');
+        $churches = $user->churches->pluck('name', 'id');
+        $families = $user->families->pluck('name', 'id');
+        $communities = $user->communities->pluck('name', 'id');
 
         $churchIds = $churches->keys()->toArray();
         $familyIds = $families->keys()->toArray();
@@ -29,33 +27,33 @@ class EventController extends Controller
         $linkableIds = array_merge($churchIds, $familyIds, $communityIds);
 
         // Query events that have links to any of these models
-        $events = Event::with(["links.linkable", "user.profile"])
-            ->whereHas("links", function ($query) use (
+        $events = Event::with(['links.linkable', 'user.profile'])
+            ->whereHas('links', function ($query) use (
                 $churchIds,
                 $familyIds,
                 $communityIds
             ) {
                 $query
                     ->where(function ($q) use ($churchIds) {
-                        $q->whereIn("linkable_id", $churchIds)->where(
-                            "linkable_type",
+                        $q->whereIn('linkable_id', $churchIds)->where(
+                            'linkable_type',
                             Church::class
                         );
                     })
                     ->orWhere(function ($q) use ($familyIds) {
-                        $q->whereIn("linkable_id", $familyIds)->where(
-                            "linkable_type",
+                        $q->whereIn('linkable_id', $familyIds)->where(
+                            'linkable_type',
                             Family::class
                         );
                     })
                     ->orWhere(function ($q) use ($communityIds) {
-                        $q->whereIn("linkable_id", $communityIds)->where(
-                            "linkable_type",
+                        $q->whereIn('linkable_id', $communityIds)->where(
+                            'linkable_type',
                             Community::class
                         );
                     });
             })
-            ->orderBy("id", "asc")
+            ->orderBy('id', 'asc')
             ->paginate(50);
 
         return response()->json($events);

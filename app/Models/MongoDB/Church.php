@@ -6,54 +6,55 @@ use MongoDB\Laravel\Eloquent\Model;
 
 class Church extends Model
 {
-    protected $connection = "mongodb";
-    protected $collection = "churches";
+    protected $connection = 'mongodb';
+
+    protected $collection = 'churches';
 
     public static function getSchema(): array
     {
         return [
-            "name" => "churches",
-            "fields" => [
+            'name' => 'churches',
+            'fields' => [
                 [
-                    "name" => "id",
-                    "type" => "string",
+                    'name' => 'id',
+                    'type' => 'string',
                 ],
                 [
-                    "name" => "name",
-                    "type" => "string",
+                    'name' => 'name',
+                    'type' => 'string',
                 ],
                 [
-                    "name" => "city",
-                    "type" => "string",
+                    'name' => 'city',
+                    'type' => 'string',
                 ],
                 [
-                    "name" => "state",
-                    "type" => "string",
+                    'name' => 'state',
+                    'type' => 'string',
                 ],
                 [
-                    "name" => "zip",
-                    "type" => "string",
+                    'name' => 'zip',
+                    'type' => 'string',
                 ],
                 [
-                    "name" => "families_count",
-                    "type" => "int32",
+                    'name' => 'families_count',
+                    'type' => 'int32',
                 ],
                 [
-                    "name" => "members_count",
-                    "type" => "int32",
+                    'name' => 'members_count',
+                    'type' => 'int32',
                 ],
                 [
-                    "name" => "location",
-                    "type" => "geopoint",
+                    'name' => 'location',
+                    'type' => 'geopoint',
                 ],
                 [
-                    "name" => "created_at",
-                    "type" => "int64",
+                    'name' => 'created_at',
+                    'type' => 'int64',
                 ],
             ],
-            "default_sorting_field" => "created_at",
-            "search-parameters" => [
-                "query_by" => "name",
+            'default_sorting_field' => 'created_at',
+            'search-parameters' => [
+                'query_by' => 'name',
             ],
         ];
     }
