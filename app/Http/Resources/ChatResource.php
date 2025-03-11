@@ -30,9 +30,9 @@ class ChatResource extends JsonResource
         return $this->name;
     }
 
-    protected function getChatAvatar(): string
+    protected function getChatAvatar(): string | null
     {
 
-        return $this->users->first(fn ($user) => $user->id != auth()->id())->profile->url_avatar;
+        return $this->users->first(fn ($user) => $user->id != auth()->id())->profile?->url_avatar;
     }
 }
