@@ -8,24 +8,26 @@ use App\Http\Controllers\Api\V1\EventController;
 use App\Http\Controllers\Api\V1\MemberController;
 use App\Http\Controllers\Api\V1\MemberPermission;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use Stancl\Tenancy\Middleware\InitializeTenancyByRequestData;
 
-Route::prefix('v1')->middleware([
-    InitializeTenancyByDomain::class,
-])->group(function () {
+Route::prefix('v1')->group(function () {
 
     Route::middleware([
+        InitializeTenancyByRequestData::class,
         'auth:sanctum',
     ])
         ->group(function () {
             Route::resource('/members', MemberController::class);
             Route::resource('/events', EventController::class);
+            Route::get('/churches/{church}/invite', [ChurchController::class, 'invite'])->name('churches.invite');
             Route::resource('/churches', ChurchController::class);
             Route::resource('/communities', CommunityController::class);
-
+            Route::resource('invitations', InvitationController::class);
             Route::post('/chats/{chat}/message', [ChatController::class, 'saveChatMessage'])->name('chats.message');
             Route::resource('/chats', ChatController::class);
             Route::resource('/users', UserController::class);
@@ -34,5 +36,6 @@ Route::prefix('v1')->middleware([
         });
 
     Route::post('/login', [AuthController::class, 'store']);
+    Route::post('/register', [AuthController::class, 'register']);
     Route::get('sanctum/csrf-cookie', [CsrfCookieController::class, 'show'])->name('sanctum.csrf-cookie');
 });

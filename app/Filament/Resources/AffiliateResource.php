@@ -25,7 +25,6 @@ class AffiliateResource extends Resource
     {
         return $form
             ->schema([
-                // Name (stored as the ID)
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255)
@@ -34,7 +33,6 @@ class AffiliateResource extends Resource
                 TextInput::make('subdomain')
                     ->required()
                     ->maxLength(255)
-                    ->unique('tenants', 'id')
                     ->regex('/^[a-z0-9]+$/')
                     ->label('Affiliate Subdomain')
                     ->disabled(fn ($operation) => $operation === 'edit'),

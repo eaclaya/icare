@@ -14,18 +14,13 @@ class CreateAffiliate extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['id'] = strtolower($data['subdomain']);
-        $data['domain'] = $data['subdomain'].'.'.env('CENTRAL_DOMAIN');
+        // dd($data);
 
         return $data;
     }
 
     protected function afterCreate(): void
     {
-        // Add custom logic after creating the Affiliate
-        $this->record->domains()->create([
-            'domain' => $this->record->domain,
-        ]);
 
         tenancy()->find($this->record->id)->run(function ($tenant) {
             $member = Member::create([

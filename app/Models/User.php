@@ -53,6 +53,11 @@ class User extends Authenticatable
         return $this->hasOne(Member::class, 'id', 'member_id');
     }
 
+    public function affiliates(): BelongsToMany
+    {
+        return $this->belongsToMany(Affiliate::class, 'tenant_user', 'user_id', 'tenant_id');
+    }
+
     public function churches(): HasManyThrough
     {
         return $this->hasManyThrough(

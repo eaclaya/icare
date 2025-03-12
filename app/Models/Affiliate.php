@@ -7,9 +7,9 @@ use Stancl\Tenancy\Database\Concerns\HasDatabase;
 use Stancl\Tenancy\Database\Concerns\HasDomains;
 use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 
-class Affiliate extends BaseTenant implements TenantWithDatabase
+class Affiliate extends BaseTenant
 {
-    use HasDatabase, HasDomains;
+    use HasDatabase;
 
     protected $table = 'tenants';
 

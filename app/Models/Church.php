@@ -34,6 +34,20 @@ class Church extends Model
         'is_campus' => 'boolean',
     ];
 
+    // protected function getApiActions()
+    // {
+
+    //     return [
+    //         'show',
+    //         'edit',
+    //         'invite' => [
+    //             'label' => __('Invite'),
+    //             'url' => route('churches.invite', $this->id),
+    //         ],
+    //         'delete'
+    //     ];
+    // }
+
     /**
      * Get the indexable data array for the model.
      *

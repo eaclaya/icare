@@ -12,8 +12,8 @@ class MemberPermission extends Controller
     {
         // Define resources and their actions
         $resources = [
-            'churches' => ['create', 'view', 'edit', 'delete'],
-            'communities' => ['create', 'view', 'edit', 'delete', 'approve'],
+            'churches' => ['create', 'view', 'edit', 'delete', 'invite'],
+            'communities' => ['create', 'view', 'edit', 'delete', 'approve', 'invite'],
             'families' => ['create', 'view', 'edit', 'delete', 'notify'],
             'events' => ['create', 'view', 'edit', 'delete', 'notify'],
         ];
