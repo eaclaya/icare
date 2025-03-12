@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Models\Affiliate;
+use App\Models\Tenant;
 
 return [
-    'tenant_model' => Affiliate::class,
-    'id_generator' => Stancl\Tenancy\UUIDGenerator::class,
+    'tenant_model' => Tenant::class,
+    'id_generator' => null,
 
     'domain_model' => null,
 

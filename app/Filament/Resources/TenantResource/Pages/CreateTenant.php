@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Filament\Resources\AffiliateResource\Pages;
+namespace App\Filament\Resources\TenantResource\Pages;
 
-use App\Filament\Resources\AffiliateResource;
+use App\Filament\Resources\TenantResource;
 use App\Models\Member;
 use App\Models\User;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Artisan;
 
-class CreateAffiliate extends CreateRecord
+class CreateTenant extends CreateRecord
 {
-    protected static string $resource = AffiliateResource::class;
+    protected static string $resource = TenantResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {

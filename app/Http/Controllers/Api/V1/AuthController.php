@@ -28,9 +28,9 @@ class AuthController extends Controller
             );
         }
 
-        $user = auth()->user()->load('member', 'affiliates');
+        $user = auth()->user()->load('member', 'tenants');
 
-        if ($user->affiliates->isEmpty()) {
+        if ($user->tenants->isEmpty()) {
             return response()->json(
                 [
                     'message' => 'You are not assigned to any affiliate. Please contact support',

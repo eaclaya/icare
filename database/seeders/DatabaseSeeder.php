@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
                 CommunityMemberSeeder::class,
                 UserSeeder::class,
                 EventSeeder::class,
-                AffiliateUserSeeder::class,
             ]);
         }
     }

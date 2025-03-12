@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Affiliate;
+use App\Models\Tenant;
 use App\Models\Tenant;
 use Closure;
 use Illuminate\Http\Request;
@@ -33,9 +33,9 @@ class InitializeTenantByDomainOrHeader
         $affiliate = null;
 
         // If tenant is not resolved by domain, try resolving by request header
-        if ($request->hasHeader('X-Affiliate')) {
-            $affiliateId = $request->header('X-Affiliate');
-            $affiliate = Affiliate::where('id', $affiliateId)->first();
+        if ($request->hasHeader('X-Tenant')) {
+            $affiliateId = $request->header('X-Tenant');
+            $affiliate = Tenant::where('id', $affiliateId)->first();
         }
 
         // Fallback to resolve the tenant by domain

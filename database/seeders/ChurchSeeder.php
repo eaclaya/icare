@@ -6,6 +6,7 @@ use App\Models\Church;
 use App\Models\Location;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ChurchSeeder extends Seeder
 {
@@ -29,5 +30,21 @@ class ChurchSeeder extends Seeder
         }
 
         Church::insert($data);
+
+        if (tenancy()->tenant) {
+            $tenant = tenancy()->tenant;
+
+            $churches = Church::whereDoesntHave('tenants')
+                ->get()
+                ->map(function ($church) use ($tenant) {
+                    return [
+                        'church_id' => $church->id,
+                        'tenant_id' => $tenant->id,
+                    ];
+                });
+
+            DB::table('church_tenant')->insert($churches->toArray());
+        }
+
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Affiliate;
+use App\Models\Tenant;
 use App\Models\Church;
 use App\Models\MongoDB\Church as MongoDBChurch;
 use App\Traits\HasTypesenseClient;
@@ -40,9 +40,9 @@ class TypesenseChurchSync extends Command
             $client->collections->create($schema);
         }
 
-        $affiliates = Affiliate::all();
-        $affiliates->each(function (Affiliate $affiliate) use ($client) {
-            $affiliate->run(function (Affiliate $affiliate) use ($client) {
+        $tenants = Tenant::all();
+        $tenants->each(function (Tenant $affiliate) use ($client) {
+            $affiliate->run(function (Tenant $affiliate) use ($client) {
                 Church::chunk(100, function ($churches) use ($client) {
                     $documents = $churches
                         ->map(fn ($church) => $church->toSearchableArray())

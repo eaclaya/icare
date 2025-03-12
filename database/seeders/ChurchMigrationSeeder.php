@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Affiliate;
+use App\Models\Tenant;
 use App\Models\Church;
 use Illuminate\Database\Seeder;
 use MongoDB\Client as MongoClient;
@@ -29,10 +29,10 @@ class ChurchMigrationSeeder extends Seeder
         // Ensure `_id` index exists for fast upserts
         $churchesCollection->createIndex(['_id' => 1]);
 
-        // Retrieve all affiliates (tenants)
-        $affiliates = Affiliate::all();
+        // Retrieve all tenants (tenants)
+        $tenants = Tenant::all();
 
-        foreach ($affiliates as $affiliate) {
+        foreach ($tenants as $affiliate) {
             $affiliate->run(function ($affiliate) use ($churchesCollection) {
                 Church::chunk(1000, function ($churches) use ($churchesCollection, $affiliate) {
                     $churchesBulk = [];

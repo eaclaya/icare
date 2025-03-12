@@ -73,6 +73,11 @@ class Church extends Model
         return $this->belongsTo(Location::class);
     }
 
+    public function tenants(): BelongsToMany
+    {
+        return $this->belongsToMany(Tenant::class);
+    }
+
     public function eventLinks(): MorphMany
     {
         return $this->morphMany(EventLink::class, 'linkable');

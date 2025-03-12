@@ -19,8 +19,8 @@ class UserLoginResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'profile' => new UserProfileResource($this->profile),
-            'current_affiliate_id' => $this->affiliates->first()->id,
-            'affiliates' => UserAffiliateResource::collection($this->affiliates),
+            'current_tenant_id' => $this->tenants->first()->id,
+            'tenants' => UserTenantResource::collection($this->tenants),
         ];
     }
 }

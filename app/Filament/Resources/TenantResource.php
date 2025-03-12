@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AffiliateResource\Pages;
-use App\Models\Affiliate;
+use App\Filament\Resources\TenantResource\Pages;
+use App\Models\Tenant;
 use App\Models\Family;
 use App\Models\User;
 use Filament\Forms;
@@ -15,9 +15,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 
-class AffiliateResource extends Resource
+class TenantResource extends Resource
 {
-    protected static ?string $model = Affiliate::class;
+    protected static ?string $model = Tenant::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -28,13 +28,13 @@ class AffiliateResource extends Resource
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255)
-                    ->label('Affiliate Name'),
+                    ->label('Tenant Name'),
 
                 TextInput::make('subdomain')
                     ->required()
                     ->maxLength(255)
                     ->regex('/^[a-z0-9]+$/')
-                    ->label('Affiliate Subdomain')
+                    ->label('Tenant Subdomain')
                     ->disabled(fn ($operation) => $operation === 'edit'),
 
                 TextInput::make('contact_name')
@@ -71,14 +71,9 @@ class AffiliateResource extends Resource
         return $table
             ->columns([
                 // Name (ID)
-                TextColumn::make('id')
+                TextColumn::make('name')
                     ->searchable()
-                    ->label('Affiliate Name'),
-
-                // Domain (from JSON data)
-                TextColumn::make('data->domain')
-                    ->searchable()
-                    ->label('Domain'),
+                    ->label('Tenant Name'),
 
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -108,9 +103,9 @@ class AffiliateResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAffiliates::route('/'),
-            'create' => Pages\CreateAffiliate::route('/create'),
-            'edit' => Pages\EditAffiliate::route('/{record}/edit'),
+            'index' => Pages\ListTenants::route('/'),
+            'create' => Pages\CreateTenant::route('/create'),
+            'edit' => Pages\EditTenant::route('/{record}/edit'),
         ];
     }
 }

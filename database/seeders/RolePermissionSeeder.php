@@ -38,7 +38,7 @@ class RolePermissionSeeder extends Seeder
 
         // Create Abilities (Permissions)
         $resources = [
-            'affiliates', 'families', 'communities', 'events', 'churches',
+            'tenants', 'families', 'communities', 'events', 'churches',
         ];
 
         foreach ($resources as $resource) {
@@ -52,9 +52,9 @@ class RolePermissionSeeder extends Seeder
         // Superadmin has all abilities
         Bouncer::allow('superadmin')->to('*');
 
-        // Admin has all abilities except for affiliates
+        // Admin has all abilities except for tenants
         foreach ($resources as $resource) {
-            if ($resource !== 'affiliates') {
+            if ($resource !== 'tenants') {
                 Bouncer::allow('admin')->to("create {$resource}");
                 Bouncer::allow('admin')->to("view {$resource}");
                 Bouncer::allow('admin')->to("edit {$resource}");
@@ -64,7 +64,7 @@ class RolePermissionSeeder extends Seeder
 
         // Manager has limited abilities
         foreach ($resources as $resource) {
-            if ($resource !== 'affiliates') {
+            if ($resource !== 'tenants') {
                 Bouncer::allow('manager')->to("create {$resource}");
                 Bouncer::allow('manager')->to("view {$resource}");
                 Bouncer::allow('manager')->to("edit {$resource}");

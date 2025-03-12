@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -61,6 +62,22 @@ class UserSeeder extends Seeder
             }
         }
 
-        \DB::table('assigned_roles')->insert($data);
+        DB::table('assigned_roles')->insert($data);
+
+
+        if (tenancy()->tenant) {
+            $tenant = tenancy()->tenant;
+
+            $users = User::whereDoesntHave('tenants')
+                ->get()
+                ->map(function ($church) use ($tenant) {
+                    return [
+                        'user_id' => $church->id,
+                        'tenant_id' => $tenant->id,
+                    ];
+                });
+
+            DB::table('tenant_user')->insert($users->toArray());
+        }
     }
 }
