@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Church;
-use App\Models\Community;
+use App\Models\Team;
 use App\Models\Event;
-use App\Models\Family;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,24 +14,24 @@ class EventController extends Controller
 {
     public function index(Request $request)
     {
-        $user = User::first()->load('churches', 'families', 'communities');
+        $user = auth()->user()->load('churches', 'groups', 'teams');
         $churches = $user->churches->pluck('name', 'id');
-        $families = $user->families->pluck('name', 'id');
-        $communities = $user->communities->pluck('name', 'id');
+        $groups = $user->groups->pluck('name', 'id');
+        $teams = $user->teams->pluck('name', 'id');
 
         $churchIds = $churches->keys()->toArray();
-        $familyIds = $families->keys()->toArray();
-        $communityIds = $communities->keys()->toArray();
+        $groupIds = $groups->keys()->toArray();
+        $teamIds = $teams->keys()->toArray();
 
         // Combine all the IDs into a single array
-        $linkableIds = array_merge($churchIds, $familyIds, $communityIds);
+        $linkableIds = array_merge($churchIds, $groupIds, $teamIds);
 
         // Query events that have links to any of these models
         $events = Event::with(['links.linkable', 'user.profile'])
             ->whereHas('links', function ($query) use (
                 $churchIds,
-                $familyIds,
-                $communityIds
+                $groupIds,
+                $teamIds
             ) {
                 $query
                     ->where(function ($q) use ($churchIds) {
@@ -40,16 +40,16 @@ class EventController extends Controller
                             Church::class
                         );
                     })
-                    ->orWhere(function ($q) use ($familyIds) {
-                        $q->whereIn('linkable_id', $familyIds)->where(
+                    ->orWhere(function ($q) use ($groupIds) {
+                        $q->whereIn('linkable_id', $groupIds)->where(
                             'linkable_type',
-                            Family::class
+                            Group::class
                         );
                     })
-                    ->orWhere(function ($q) use ($communityIds) {
-                        $q->whereIn('linkable_id', $communityIds)->where(
+                    ->orWhere(function ($q) use ($teamIds) {
+                        $q->whereIn('linkable_id', $teamIds)->where(
                             'linkable_type',
-                            Community::class
+                            Team::class
                         );
                     });
             })

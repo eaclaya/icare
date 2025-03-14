@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('member_id')->constrained()->onDelete('cascade');
             $table->string('church_type', 50)->nullable();
             $table->timestamps();
+            $table->unique(['church_id', 'member_id']);
         });
     }
 

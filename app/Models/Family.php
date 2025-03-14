@@ -2,28 +2,21 @@
 
 namespace App\Models;
 
-use App\Traits\HasApiActions;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Family extends Model
 {
-    use HasApiActions;
+    protected $fillable = ['name', 'location_id',  'structure', 'primary_contact_id'];
 
-    protected $fillable = ['name', 'type', 'structure', 'data'];
-
-    protected $casts = [
-        'data' => 'json',
-    ];
-
-    public function eventLinks(): MorphMany
+    public function groups(): MorphMany
     {
-        return $this->morphMany(EventLink::class, 'linkable');
+        return $this->morphMany(Group::class, 'groupable');
     }
 
-    public function members(): BelongsToMany
+    public function location(): BelongsTo
     {
-        return $this->belongsToMany(Member::class);
+        return $this->belongsTo(Location::class);
     }
 }

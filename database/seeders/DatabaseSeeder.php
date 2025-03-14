@@ -12,19 +12,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        if (tenancy()->tenant) {
-            $this->call([
-                RolePermissionSeeder::class,
-                LocationSeeder::class,
-                ChurchSeeder::class,
-                FamilySeeder::class,
-                CommunitySeeder::class,
-                MemberSeeder::class,
-                ChurchMemberSeeder::class,
-                CommunityMemberSeeder::class,
-                UserSeeder::class,
-                EventSeeder::class,
-            ]);
-        }
+
+        $this->call([
+            RolePermissionSeeder::class,
+            LocationSeeder::class,
+            EntityTypeSeeder::class,
+            ChurchSeeder::class,
+            TeamSeeder::class,
+            MemberSeeder::class,
+            FamilySeeder::class,
+            PetSeeder::class,
+            GroupSeeder::class,
+            TeamMemberSeeder::class,
+            GroupMemberSeeder::class,
+            GroupTeamSeeder::class,
+            UserSeeder::class,
+            EventSeeder::class,
+        ]);
+
     }
 }

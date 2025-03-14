@@ -36,7 +36,7 @@ class Church extends Model
                     'type' => 'string',
                 ],
                 [
-                    'name' => 'families_count',
+                    'name' => 'groups_count',
                     'type' => 'int32',
                 ],
                 [

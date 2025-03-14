@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TenantResource\Pages;
 use App\Models\Tenant;
-use App\Models\Family;
+use App\Models\Group;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;

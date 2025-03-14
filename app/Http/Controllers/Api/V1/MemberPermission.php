@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
+use App\Models\Group;
+use App\Models\Church;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -12,14 +16,13 @@ class MemberPermission extends Controller
     {
         // Define resources and their actions
         $resources = [
-            'churches' => ['create', 'view', 'edit', 'delete', 'invite'],
-            'communities' => ['create', 'view', 'edit', 'delete', 'approve', 'invite'],
-            'families' => ['create', 'view', 'edit', 'delete', 'notify'],
-            'events' => ['create', 'view', 'edit', 'delete', 'notify'],
+            'churches' => ['create' => Church::class, 'view' => Church::class, 'edit' => Church::class, 'delete' => Church::class],
+            'teams' => ['create' => Team::class, 'view' => Team::class, 'edit' => Team::class, 'delete' => Team::class],
+            'groups' => ['create' => Group::class, 'view' => Group::class, 'edit' => Group::class, 'delete' => Group::class],
+            'events' => ['create' => Event::class, 'view' => Event::class, 'edit' => Event::class, 'delete' => Event::class],
         ];
 
         $user = auth()->user();
-
         $permissions = [];
 
         foreach ($resources as $resource => $actions) {
@@ -27,8 +30,8 @@ class MemberPermission extends Controller
             $globalAccess = [
                 'permissions' => [],
             ];
-            foreach ($actions as $action) {
-                if ($user->can("{$action} {$resource}")) {
+            foreach ($actions as $action => $model) {
+                if ($user->can("{$action}", $model)) {
                     $globalAccess['permissions'][] = $action;
                 }
             }
@@ -44,8 +47,8 @@ class MemberPermission extends Controller
                     $entityId = $instance->id;
                     $entity_type = get_class($instance);
 
-                    foreach ($actions as $action) {
-                        if ($user->can("{$action} {$resource}", $instance)) {
+                    foreach ($actions as $action => $model) {
+                        if ($user->can("{$action}", $instance)) {
                             $instancePermissions[] = $action;
                         }
                     }
@@ -100,11 +103,11 @@ class MemberPermission extends Controller
 
         foreach ($updatedPermissions as $resource => $permissions) {
             foreach ($permissions['global'] as $action) {
-                $ability = "{$action['id']} {$resource}";
+                $ability = "{$action['id']}";
                 if ($action['enabled']) {
-                    $user->allow($ability);
+                    $user->allow($ability, $action['entity_type']);
                 } else {
-                    $user->disallow($ability);
+                    $user->disallow($ability, $action['entity_type']);
                 }
             }
 
@@ -125,10 +128,11 @@ class MemberPermission extends Controller
     protected function getFormattedActions($actions, $permissions)
     {
         $result = [];
-        foreach ($actions as $action) {
+        foreach ($actions as $action => $model) {
             $result[$action] = [
                 'id' => $action,
                 'name' => Str::title($action),
+                'entity_type' => $model,
                 'enabled' => in_array($action, $permissions),
             ];
         }

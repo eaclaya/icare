@@ -22,7 +22,7 @@ class ChurchController extends Controller
     {
         $user = auth()->user();
 
-        $query = tenancy()->tenant->churches()->withCount(['members', 'families'])
+        $query = Church::withCount(['members', 'groups'])
             ->with(['location'])
             ->when($request->q, function ($query) use ($request) {
                 $query->whereLike('name', "%{$request->q}%");

@@ -21,8 +21,6 @@ class MemberSeeder extends Seeder
         $data = [];
         $faker = Faker::create();
         $locations = Location::pluck('id');
-        $lastMember = Member::orderBy('id', 'desc')->first();
-        $roles = Role::pluck('name');
         $avatars = [
             'https://d9jhi50qo719s.cloudfront.net/k63/samples/pju_800.JPG?240729124942',
             'https://d9jhi50qo719s.cloudfront.net/k63/samples/pju_800.JPG?240729124942',
@@ -51,16 +49,6 @@ class MemberSeeder extends Seeder
         }
 
         DB::table('members')->insert($data);
-
-        $members = Member::when($lastMember, function ($query) use ($lastMember) {
-            $query->where('id', '>', $lastMember->id);
-        })
-            ->get();
-
-
-        foreach ($members as $member) {
-            Bouncer::assign($faker->randomElement($roles))->to($member);
-        }
 
     }
 }

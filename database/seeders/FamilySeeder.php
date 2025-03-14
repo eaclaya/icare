@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Church;
 use App\Models\Family;
+use App\Models\Location;
+use App\Models\Member;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -17,20 +19,15 @@ class FamilySeeder extends Seeder
     {
         $data = [];
         $faker = Faker::create();
-        $churches = Church::pluck('id');
-        for ($i = 0; $i < 100; $i++) {
+        $locations = Location::pluck('id');
+        $members = Member::pluck('id');
+
+        for ($i = 0; $i < 10; $i++) {
             $data[] = [
-                'name' => $faker->lastName,
-                'type' => $faker->randomElement([
-                    'Nuclear',
-                    'Extended',
-                    'Single Parent',
-                ]),
-                'structure' => $faker->randomElement([
-                    'Traditional',
-                    'Blended',
-                    'Stepfamily',
-                ]),
+                'name' => $faker->company,
+                'structure' => $faker->randomElement(['nuclear', 'single_mom', 'single_dad', 'kin']),
+                'location_id' => $faker->randomElement($locations),
+                'primary_contact_id' => $faker->randomElement($members),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
@@ -38,21 +35,5 @@ class FamilySeeder extends Seeder
 
         Family::insert($data);
 
-        $data = Family::get('id')->map(function ($family) use (
-            $churches,
-            $faker
-        ) {
-            return [
-                'family_id' => $family->id,
-                'church_id' => $faker->randomElement($churches),
-                'church_type' => $faker->randomElement([
-                    'Home Church',
-                    'Serving Church',
-                    'Other',
-                ]),
-            ];
-        });
-
-        DB::table('church_family')->insert($data->toArray());
     }
 }

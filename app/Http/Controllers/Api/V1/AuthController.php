@@ -28,16 +28,8 @@ class AuthController extends Controller
             );
         }
 
-        $user = auth()->user()->load('member', 'tenants');
+        $user = auth()->user()->load('member');
 
-        if ($user->tenants->isEmpty()) {
-            return response()->json(
-                [
-                    'message' => 'You are not assigned to any affiliate. Please contact support',
-                ],
-                401
-            );
-        }
 
         return response()->json([
             'user' => new UserLoginResource($user)

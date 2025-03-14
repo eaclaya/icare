@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Church;
-use App\Models\Community;
+use App\Models\Team;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -26,7 +26,7 @@ class InvitationStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'invitable_type' => ['required', 'string', Rule::in([Church::class,Community::class])],
+            'invitable_type' => ['required', 'string', Rule::in([Church::class,Team::class])],
             'invitable_id' => ['required', "numeric"],
         ];
     }
