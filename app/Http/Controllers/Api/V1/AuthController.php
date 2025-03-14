@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LoginResource;
+use App\Http\Resources\UserLoginResource;
+use App\Models\Invitation;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -22,6 +27,32 @@ class AuthController extends Controller
                 401
             );
         }
+
+        $user = auth()->user()->load('member');
+
+
+        return response()->json([
+            'user' => new UserLoginResource($user)
+        ]);
+
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'unique:users,email'],
+            'password' => ['required', Password::default()],
+            'token' => ['required', 'exists:invitations,token']
+        ]);
+
+        $invitation = Invitation::where('token', $request->token)->firstOrFail();
+
+        if (now()->greaterThan($invitation->expires_at)) {
+            return response()->json(['message' => 'Invitation expired'], 400);
+        }
+
+        User::create($request->validated());
+
         $user = auth()->user()->load('member');
 
         return response()->json(compact('user'));

@@ -21,8 +21,6 @@
         "livewire/volt": "^1.0",
         "mongodb/laravel-mongodb": "^5.1",
         "silber/bouncer": "^1.0",
-        "spatie/laravel-permission": "^6.16",
-        "stancl/tenancy": "^3.8",
         "typesense/typesense-php": "^5.0"
     },
     "require-dev": {

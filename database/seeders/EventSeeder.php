@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Church;
-use App\Models\Community;
+use App\Models\Team;
 use App\Models\Event;
-use App\Models\Family;
+use App\Models\Group;
 use App\Models\Location;
 use App\Models\User;
 use Faker\Factory as Faker;
@@ -21,8 +21,8 @@ class EventSeeder extends Seeder
     {
         $faker = Faker::create();
         $churches = Church::pluck('id', 'id');
-        $families = Family::pluck('id', 'id');
-        $communities = Community::pluck('id', 'id');
+        $groups = Group::pluck('id', 'id');
+        $teams = Team::pluck('id', 'id');
         $locations = Location::pluck('id', 'id');
         $users = User::pluck('id', 'id');
 
@@ -53,8 +53,8 @@ class EventSeeder extends Seeder
 
             $data = Event::get('id')->map(function ($event) use (
                 $churches,
-                $families,
-                $communities,
+                $groups,
+                $teams,
                 $faker
             ) {
                 $index = $faker->numberBetween(0, 2);
@@ -64,11 +64,11 @@ class EventSeeder extends Seeder
                     $linkableType = "App\Models\Church";
                     $collection = $churches;
                 } elseif ($index === 1) {
-                    $linkableType = "App\Models\Family";
-                    $collection = $families;
+                    $linkableType = "App\Models\Group";
+                    $collection = $groups;
                 } else {
-                    $linkableType = "App\Models\Community";
-                    $collection = $communities;
+                    $linkableType = "App\Models\Team";
+                    $collection = $teams;
                 }
 
                 return [

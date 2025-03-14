@@ -18,7 +18,6 @@ class LocationSeeder extends Seeder
 
         for ($i = 0; $i < 100; $i++) {
             $data[] = [
-                'name' => $faker->streetAddress,
                 'street' => $faker->streetAddress,
                 'city' => $faker->city,
                 'state' => $faker->state,

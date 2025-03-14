@@ -18,8 +18,8 @@ class ChurchResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'location' => $this->location,
-            'families_count' => $this->families_count,
-            'communities_count' => $this->communities_count,
+            'groups_count' => $this->groups_count,
+            'teams_count' => $this->teams_count,
             'actions' => $this->getActions(),
         ];
     }

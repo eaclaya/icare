@@ -9,7 +9,8 @@ trait HasApiActions
     protected $actions = [
         'show',
         'edit',
-        'delete'
+        'delete',
+        // 'invite'
     ];
 
 
@@ -30,7 +31,8 @@ trait HasApiActions
             $url = null;
             $label = $action;
             $event = null;
-            $permission = "{$action} {$resource}";
+
+            $permission = null;
 
             if (is_array($val)) {
                 $action = $key;
@@ -40,11 +42,13 @@ trait HasApiActions
                 $permission = $val['permission'] ?? $permission;
             }
 
+            $permission ??=  $action;
             $label = Str::title($label);
             $httpAction = $action === 'delete' ? 'destroy' : $action;
             $url ??= route("{$resource}.{$httpAction}", $this->id);
 
-            if ($user->can($permission) || $user->can($permission, $this)) {
+
+            if ($user->can($permission, get_class($this)) || $user->can($permission, $this)) {
                 $result[] = [
                     'id' => $action,
                     'label' => __($label),

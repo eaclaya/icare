@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ChurchResource;
 use App\Models\Church;
+use App\Models\MongoDB\Church as MongoChurch;
 use Illuminate\Http\Request;
 use Typesense\Client as TypesenseClient;
 
@@ -21,7 +22,7 @@ class ChurchController extends Controller
     {
         $user = auth()->user();
 
-        $query = Church::withCount(['members', 'families'])
+        $query = Church::withCount(['members', 'groups'])
             ->with(['location'])
             ->when($request->q, function ($query) use ($request) {
                 $query->whereLike('name', "%{$request->q}%");
@@ -79,12 +80,29 @@ class ChurchController extends Controller
         $longitude = $request->input('longitude');
         $name = $request->input('name');
 
-        $churches = Church::where('location', 'near', [
+        $churches = MongoChurch::where('location', 'near', [
             '$geometry' => [
                 'type' => 'Point',
                 'coordinates' => [$longitude, $latitude],
             ],
             '$maxDistance' => 50000,
         ])->get();
+    }
+
+    public function invite(Request $request, Church $church)
+    {
+        $data = [
+            'church' => $church,
+            'callback' => [
+                'url' => route('invitations.store'),
+                'method' => 'POST',
+                'data' => [
+                    'invitable_id' => $church->id,
+                    'invitable_type' => Church::class,
+                ]
+            ]
+        ];
+
+        return response()->json($data);
     }
 }

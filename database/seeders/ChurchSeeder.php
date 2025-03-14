@@ -6,6 +6,7 @@ use App\Models\Church;
 use App\Models\Location;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ChurchSeeder extends Seeder
 {
@@ -29,5 +30,6 @@ class ChurchSeeder extends Seeder
         }
 
         Church::insert($data);
+
     }
 }

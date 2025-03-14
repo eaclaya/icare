@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Member;
 use Illuminate\Console\Command;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -39,11 +40,18 @@ class CreateUser extends Command
         $this->line('Password: ' . str_repeat('*', strlen($password)));
 
         if ($this->confirm('Do you wish to create this user?')) {
+            $member = Member::create([
+                'first_name' => $name,
+                'last_name' => $name,
+                'email' => $email,
+            ]);
+
             // Create the user
             User::create([
                 'name' => $name,
                 'email' => $email,
                 'password' => Hash::make($password),
+                'member_id' => $member->id
             ]);
 
             $this->info('User created successfully!');

@@ -53,39 +53,29 @@ class User extends Authenticatable
         return $this->hasOne(Member::class, 'id', 'member_id');
     }
 
-    public function churches(): HasManyThrough
+
+
+    public function teams(): HasManyThrough
     {
         return $this->hasManyThrough(
-            Church::class, // The target model (churches)
-            ChurchMember::class, // The intermediate model (church_member)
-            'member_id', // Foreign key on the church_member table
-            'id', // Foreign key on the churches table
+            Team::class, // The target model (teams)
+            TeamMember::class, // The intermediate model (team_member)
+            'member_id', // Foreign key on the team_member table
+            'id', // Foreign key on the teams table
             'member_id', // Local key on the users table
-            'church_id' // Local key on the church_member table
+            'team_id' // Local key on the church_member table
         );
     }
 
-    public function communities(): HasManyThrough
+    public function groups(): HasManyThrough
     {
         return $this->hasManyThrough(
-            Community::class, // The target model (communities)
-            CommunityMember::class, // The intermediate model (community_member)
-            'member_id', // Foreign key on the community_member table
-            'id', // Foreign key on the communities table
-            'member_id', // Local key on the users table
-            'community_id' // Local key on the church_member table
-        );
-    }
-
-    public function families(): HasManyThrough
-    {
-        return $this->hasManyThrough(
-            Family::class, // The target model (families)
-            FamilyMember::class, // The intermediate model (family_member)
+            Group::class, // The target model (groups)
+            GroupMember::class, // The intermediate model (family_member)
             'member_id', // Foreign key on the family_member table
-            'id', // Foreign key on the families table
+            'id', // Foreign key on the groups table
             'member_id', // Local key on the users table
-            'family_id' // Local key on the family_member table
+            'group_id' // Local key on the family_member table
         );
     }
 

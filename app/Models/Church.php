@@ -34,6 +34,20 @@ class Church extends Model
         'is_campus' => 'boolean',
     ];
 
+    // protected function getApiActions()
+    // {
+
+    //     return [
+    //         'show',
+    //         'edit',
+    //         'invite' => [
+    //             'label' => __('Invite'),
+    //             'url' => route('churches.invite', $this->id),
+    //         ],
+    //         'delete'
+    //     ];
+    // }
+
     /**
      * Get the indexable data array for the model.
      *
@@ -47,7 +61,7 @@ class Church extends Model
             'city' => $this->city,
             'state' => $this->state,
             'zip' => $this->zip,
-            'families_count' => (int) $this->families()->count(),
+            'groups_count' => (int) $this->groups()->count(),
             'members_count' => (int) $this->members()->count(),
             'location' => [(float) $this->lat, (float) $this->lng],
             'created_at' => $this->created_at->timestamp,
@@ -69,8 +83,8 @@ class Church extends Model
         return $this->belongsToMany(Member::class)->withPivot(['church_type']);
     }
 
-    public function families(): BelongsToMany
+    public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Family::class);
+        return $this->belongsToMany(Team::class);
     }
 }

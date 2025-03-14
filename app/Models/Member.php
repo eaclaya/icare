@@ -32,14 +32,14 @@ class Member extends Model
         return $this->belongsToMany(Church::class)->withPivot(['church_type']);
     }
 
-    public function communities(): BelongsToMany
+    public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Community::class);
+        return $this->belongsToMany(Team::class);
     }
 
-    public function families(): BelongsToMany
+    public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(Family::class);
+        return $this->belongsToMany(Group::class);
     }
 
     public function location(): BelongsTo
