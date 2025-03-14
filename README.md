@@ -8,7 +8,8 @@
 4. Run `docker compose up -d`.
 5. Run `php artisan migrate`.
 6. Run `php artisan app:create-user` (this will create a user in the landlord database).
-7. Open [http://icare.test](http://icare.test) and log in with the user credentials from the previous step.
+7. Run `php artisan db:seed`
+8. Open [http://icare.test](http://icare.test) and log in with the user credentials from the previous step.
 
 ## Using Docker Only
 
@@ -18,7 +19,8 @@
 4. Run `docker compose up -d`.
 5. Run `docker compose exec app php artisan migrate`.
 6. Run `docker compose exec app php artisan app:create-user` (this will create a user in the landlord database).
-7. Open [http://icare.test](http://icare.test) and log in with the user credentials from the previous step.
+7. Run `php artisan db:seed`
+8. Open [http://icare.test](http://icare.test) and log in with the user credentials from the previous step.
 
 ### Additional Configuration
 
