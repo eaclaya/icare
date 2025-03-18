@@ -5,24 +5,26 @@
 1. Move the project folder to the Herd folder.
 2. Copy `.env.example` to `.env`.
 3. Run `composer install`.
-4. Run `docker compose up -d`.
-5. Run `php artisan migrate`.
-6. Run `php artisan app:create-user` (this will create a user in the landlord database).
-7. Run `php artisan db:seed`
-8. Open [http://icare.test](http://icare.test) and log in with the user credentials from the previous step.
+4. Run `php artisan key:generate`.
+5. Run `docker compose up -d`.
+6. Run `php artisan migrate`.
+7. Run `php artisan app:create-user`
+8. Run `php artisan db:seed`
+9. Open [http://icare.test](http://icare.test) and log in with the user credentials from the previous step.
 
 ## Using Docker Only
 
 1. Copy `.env.example` to `.env`.
 2. Uncomment the `nginx` service in `docker-compose.yml`.
 3. Run `composer install`.
-4. Run `docker compose up -d`.
-5. Run `docker compose exec app php artisan migrate`.
-6. Run `docker compose exec app php artisan app:create-user` (this will create a user in the landlord database).
-7. Run `php artisan db:seed`
-8. Open [http://icare.test](http://icare.test) and log in with the user credentials from the previous step.
+4. Run `php artisan key:generate`.
+5. Run `docker compose up -d`.
+6. Run `docker compose exec app php artisan migrate`.
+7. Run `docker compose exec app php artisan app:create-user`
+8. Run `php artisan db:seed`
+9. Open [http://icare.test](http://icare.test) and log in with the user credentials from the previous step.
 
 ### Additional Configuration
 
 -   Add `icare.test` to your `/etc/hosts`.
--   You’ll also need to include the affiliate subdomain when you create a new affiliate.
+-   Run `php artisan db:seed --class=DemoSeeder` to seed dummy data

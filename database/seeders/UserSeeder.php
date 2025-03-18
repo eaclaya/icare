@@ -22,7 +22,6 @@ class UserSeeder extends Seeder
         $lastUser = User::latest('id')->first();
         $now = now()->format('Y-m-d H:i:s');
         $users = Member::query()
-            ->orderBy('id', 'desc')
             ->take(100)
             ->get()
             ->map(function ($member) use ($now) {

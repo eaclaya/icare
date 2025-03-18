@@ -40,4 +40,5 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/login', [AuthController::class, 'store']);
     Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show'])->name('sanctum.csrf-cookie');
 });
