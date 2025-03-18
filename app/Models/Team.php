@@ -44,6 +44,11 @@ class Team extends Model
         return $this->belongsToMany(Group::class);
     }
 
+    public function churches(): BelongsToMany
+    {
+        return $this->belongsToMany(Church::class);
+    }
+
     public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class);

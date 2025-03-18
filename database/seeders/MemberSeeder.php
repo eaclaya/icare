@@ -32,18 +32,20 @@ class MemberSeeder extends Seeder
             'https://www.aidemos.info/wp-content/uploads/2023/05/An_avatar_of_a_smart_man_with_glasses_and_a_mustache_w_5c41acac-d69c-4981-987d-7321c3b5ca5f.webp',
         ];
 
+        $now = now()->format('Y-m-d H:i:s');;
+        $time = time();
         for ($i = 0; $i < 100; $i++) {
             $row = [
                 'first_name' => $faker->firstName,
                 'last_name' => $faker->lastName,
-                'email' => $faker->unique()->safeEmail,
+                'email' => $time . $i . $faker->email,
                 'phone' => $faker->phoneNumber,
-                'dob' => $faker->date,
+                'dob' => $now,
                 'gender' => $faker->randomElement(['Male', 'Female']),
                 'location_id' => $faker->randomElement($locations),
                 'url_avatar' => $faker->randomElement($avatars),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
             $data[] = $row;
         }

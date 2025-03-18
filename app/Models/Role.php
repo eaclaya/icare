@@ -14,6 +14,7 @@ class Role extends Model
                 'Team Leader' => ['create', 'view', 'edit']
             ],
             Group::class => [
+                'Admin' => ['create','view', 'edit', 'delete'],
                 'Parent' => ['create', 'view', 'edit', 'delete'],
                 'Children' => ['view']
             ],

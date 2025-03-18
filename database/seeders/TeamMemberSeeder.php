@@ -16,10 +16,14 @@ class TeamMemberSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        $teams = Team::pluck('id');
+        $teams = Team::latest('id')->take(100)->pluck('id');
+        $lastMember = Member::latest('id')->first();
 
         $teamMembers = Member::query()
             ->select('id', 'email', 'first_name', 'last_name')
+            ->when($lastMember, function ($query) use ($lastMember) {
+                $query->where('id', '>', $lastMember->id);
+            })
             ->get()
             ->map(function ($member) use ($teams, $faker) {
                 return [

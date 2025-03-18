@@ -18,14 +18,15 @@ class ChurchSeeder extends Seeder
         $data = [];
         $faker = Faker::create();
         $locations = Location::pluck('id');
+        $now = now()->format('Y-m-d H:i:s');
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
                 'name' => $faker->company,
                 'nickname' => $faker->company,
                 'campus_name' => $faker->company,
                 'location_id' => $faker->randomElement($locations),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
         }
 

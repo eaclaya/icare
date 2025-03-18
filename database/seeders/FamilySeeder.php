@@ -20,16 +20,16 @@ class FamilySeeder extends Seeder
         $data = [];
         $faker = Faker::create();
         $locations = Location::pluck('id');
-        $members = Member::pluck('id');
-
+        $members = Member::latest('id')->take(100)->pluck('id');
+        $now = now()->format('Y-m-d H:i:s');
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
                 'name' => $faker->company,
                 'structure' => $faker->randomElement(['nuclear', 'single_mom', 'single_dad', 'kin']),
                 'location_id' => $faker->randomElement($locations),
                 'primary_contact_id' => $faker->randomElement($members),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
         }
 

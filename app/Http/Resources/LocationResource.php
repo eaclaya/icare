@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TeamCollectionResource extends JsonResource
+class LocationResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,13 @@ class TeamCollectionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'location' => new LocationResource($this->location),
-            'members_count' => $this->members_count,
-            'actions' => $this->getActions(),
+            'street' => $this->street,
+            'city' => $this->city,
+            'state' => $this->state,
+            'zip' => $this->zip,
+            'country' => $this->country,
+            'lat' => $this->lat,
+            'lng' => $this->lng,
         ];
     }
 }

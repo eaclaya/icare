@@ -15,9 +15,9 @@ class GroupTeamSeeder extends Seeder
      */
     public function run(): void
     {
-        $teams = Team::pluck('id');
+        $teams = Team::latest('id')->take(1000)->pluck('id');
 
-        $groups = Group::pluck('id');
+        $groups = Group::latest('id')->take(1000)->pluck('id');
 
         $data = [];
 

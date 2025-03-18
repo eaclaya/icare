@@ -6,11 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class Member extends Model
 {
-    use HasRolesAndAbilities;
 
     protected $fillable = [
         'first_name',

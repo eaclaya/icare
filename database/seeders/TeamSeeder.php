@@ -21,7 +21,7 @@ class TeamSeeder extends Seeder
         $types = TeamType::pluck('id');
         $locations = Location::pluck('id');
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
             $data[] = [
                 'name' => $faker->name,
                 'description' => $faker->name,

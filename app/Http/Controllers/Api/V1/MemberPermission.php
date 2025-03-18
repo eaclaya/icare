@@ -83,8 +83,10 @@ class MemberPermission extends Controller
         foreach ($permissions as $key => $item) {
             $globalPermissions = collect($item['global']['actions'])->filter(fn ($action) => isset($action['updated_at']))->toArray();
             $scopedPermissions = [];
+
             foreach ($item['scoped'] as $resource) {
                 $actions = collect($resource['actions'])->filter(fn ($action) => isset($action['updated_at']));
+
                 $actions = $actions->map(function ($action) use ($resource) {
                     $action['entity_id'] = $resource['entity_id'];
                     $action['entity_type'] = $resource['entity_type'];
@@ -92,7 +94,10 @@ class MemberPermission extends Controller
                     return $action;
                 })->toArray();
 
-                $scopedPermissions = [...$scopedPermissions, ...$actions];
+                if (!empty($actions)) {
+                    $scopedPermissions[$resource['entity_id']] = $actions;
+                }
+
             }
 
             $updatedPermissions[$key] = [
@@ -111,18 +116,21 @@ class MemberPermission extends Controller
                 }
             }
 
-            foreach ($permissions['scoped'] as $action) {
-                $ability = "{$action['id']} {$resource}";
-                $modelClass = $action['entity_type'];
-                $modelId = $action['entity_id'];
-                $model = $modelClass::find($modelId);
-                if ($action['enabled']) {
-                    $user->allow($ability, $model);
-                } else {
-                    $user->disallow($ability, $model);
+            foreach ($permissions['scoped'] as $modelId => $actions) {
+                foreach ($actions as $action) {
+                    $ability = "{$action['id']}";
+                    $modelClass = $action['entity_type'];
+                    $model = $modelClass::find($modelId);
+                    if ($action['enabled']) {
+                        $user->allow($ability, $model);
+                    } else {
+                        $user->disallow($ability, $model);
+                    }
                 }
             }
         }
+
+        return response()->json(['success' => true]);
     }
 
     protected function getFormattedActions($actions, $permissions)

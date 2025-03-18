@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
         $faker = Faker::create();
         $roles = Role::where('name', 'volunteer')->pluck('id');
         $lastUser = User::latest('id')->first();
-        $now = now();
+        $now = now()->format('Y-m-d H:i:s');
         $users = Member::query()
             ->orderBy('id', 'desc')
             ->take(100)
@@ -36,27 +36,30 @@ class UserSeeder extends Seeder
                 ];
             });
 
-        User::insert($users->toArray());
+        try {
+            User::insert($users->toArray());
 
-        $users = User::query()
-            ->when($lastUser, function ($query) use ($lastUser) {
-                return $query->where('id', '>', $lastUser->id);
-            })
-            ->pluck('id');
+            $users = User::query()
+                ->when($lastUser, function ($query) use ($lastUser) {
+                    return $query->where('id', '>', $lastUser->id);
+                })
+                ->pluck('id');
 
-        $data = [];
+            $data = [];
 
-        foreach ($users as $user) {
+            foreach ($users as $user) {
 
-            $randomRole = $faker->randomElement($roles);
-            $data[] = [
-                'role_id' => $randomRole,
-                'entity_id' => $user,
-                'entity_type' => User::class,
-            ];
+                $randomRole = $faker->randomElement($roles);
+                $data[] = [
+                    'role_id' => $randomRole,
+                    'entity_id' => $user,
+                    'entity_type' => User::class,
+                ];
 
-        }
+            }
 
-        DB::table('assigned_roles')->insert($data);
+            DB::table('assigned_roles')->insert($data);
+        } catch (\Exception $e) {}
+
     }
 }
