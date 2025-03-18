@@ -14,20 +14,9 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            // RolePermissionSeeder::class,
-            // LocationSeeder::class,
-            // EntityTypeSeeder::class,
-            ChurchSeeder::class,
-            TeamSeeder::class,
-            MemberSeeder::class,
-            FamilySeeder::class,
-            PetSeeder::class,
-            GroupSeeder::class,
-            TeamMemberSeeder::class,
-            GroupMemberSeeder::class,
-            GroupTeamSeeder::class,
-            UserSeeder::class,
-            EventSeeder::class,
+            RolePermissionSeeder::class,
+            LocationSeeder::class,
+            EntityTypeSeeder::class,
         ]);
 
     }
