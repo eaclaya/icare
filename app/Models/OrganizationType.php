@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrganizationType extends Model
 {
-    public function location(): HasMany
+    public function organizations(): HasMany
     {
         return $this->hasMany(Organization::class);
     }
