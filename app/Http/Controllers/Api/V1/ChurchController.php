@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ChurchResource;
 use App\Models\Church;
-use App\Models\MongoDB\Church as MongoChurch;
 use Illuminate\Http\Request;
 use Typesense\Client as TypesenseClient;
 
@@ -20,19 +19,24 @@ class ChurchController extends Controller
 
     public function index(Request $request)
     {
-        $user = auth()->user();
+        $user = auth()->user()->load('teams.churches');
 
-        $query = Church::withCount(['members', 'groups'])
+        $query = Church::withCount(['members', 'teams'])
             ->with(['location'])
             ->when($request->q, function ($query) use ($request) {
                 $query->whereLike('name', "%{$request->q}%");
             });
 
         // Check if the user has access to view all churches
-        if (! $user->can('view churches')) {
-            $churchIds = $user->churches->filter(function ($church) use ($user) {
-                return $user->can('view churches', $church);
-            })->pluck('id');
+        if (! $user->can('view', Church::class)) {
+            $churchIds = $user->teams->pluck('churches')
+                ->flatten()
+                ->unique('id')
+                ->values()
+                ->filter(function ($church) use ($user) {
+                    return $user->can('view', $church);
+                })
+                ->pluck('id');
 
             $query = $query->whereIn('id', $churchIds);
         }
@@ -64,30 +68,6 @@ class ChurchController extends Controller
         // ]);
     }
 
-    public function match(Request $request)
-    {
-        $data = $request->validate([
-            'name' => ['required', 'string'],
-            'street_1' => ['required', 'string'],
-            'state' => ['required', 'string'],
-            'city' => ['required', 'string'],
-            'zip' => ['required', 'string'],
-            'lat' => ['required', 'numeric'],
-            'lng' => ['required', 'numeric'],
-        ]);
-
-        $latitude = $request->input('latitude');
-        $longitude = $request->input('longitude');
-        $name = $request->input('name');
-
-        $churches = MongoChurch::where('location', 'near', [
-            '$geometry' => [
-                'type' => 'Point',
-                'coordinates' => [$longitude, $latitude],
-            ],
-            '$maxDistance' => 50000,
-        ])->get();
-    }
 
     public function invite(Request $request, Church $church)
     {

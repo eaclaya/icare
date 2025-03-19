@@ -25,8 +25,9 @@ Route::prefix('v1')->group(function () {
             Route::get('/churches/{church}/invite', [ChurchController::class, 'invite'])->name('churches.invite');
             Route::resource('/churches', ChurchController::class);
             Route::post('/teams/{team}/groups', [TeamController::class, 'saveTeamGroup']);
-            Route::delete('/teams/{team}/groups', [TeamController::class, 'removeTeamGroup']);
+            Route::delete('/teams/{team}/groups/{group}', [TeamController::class, 'removeTeamGroup']);
             Route::post('/teams/{team}/members', [TeamController::class, 'saveTeamMember']);
+            Route::delete('/teams/{team}/members/{member}', [TeamController::class, 'removeTeamMember']);
             Route::resource('/teams', TeamController::class);
             Route::resource('/groups', GroupController::class);
             Route::resource('invitations', InvitationController::class);
@@ -39,5 +40,5 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/login', [AuthController::class, 'store']);
     Route::post('/register', [AuthController::class, 'register']);
-    Route::get('sanctum/csrf-cookie', [CsrfCookieController::class, 'show'])->name('sanctum.csrf-cookie');
+    Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show'])->name('sanctum.csrf-cookie');
 });

@@ -44,6 +44,7 @@ class ChatController extends Controller
         return ChatMessageResource::collection($messages);
     }
 
+
     public function update(ChatUpdateRequest $request, Chat $chat)
     {
         $chat->update($request->all());

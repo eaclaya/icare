@@ -6,8 +6,10 @@ use App\FamilyStructure;
 use App\Http\Resources\GroupCollectionResource;
 use App\Http\Resources\GroupResource;
 use App\Models\Group;
+use App\Models\GroupMember;
 use App\Models\GroupType;
 use App\Models\Location;
+use App\Models\Role;
 use App\Models\User;
 use App\PetType;
 use Illuminate\Http\Request;
@@ -114,6 +116,7 @@ class GroupController extends Controller
         $groupType = GroupType::findOrFail($request->group_type_id);
         $groupableType = "App\\Models\\{$groupType->name}";
         $data = $request->all();
+        $user = auth()->user();
 
         $location = Location::create($request->location);
         $data['location_id'] = $location->id;
@@ -122,6 +125,24 @@ class GroupController extends Controller
         $data['groupable_id'] = $model->id;
         $data['groupable_type'] = $groupableType;
         $group = Group::create($data);
+
+        GroupMember::firstOrCreate(
+            ['group_id' => $group->id, 'member_id' => $user->member_id],
+            ['role' => 'Admin'],
+        );
+
+
+        $schema = Role::roleAbilitiesSchema();
+
+        foreach ($schema[Group::class] as $role => $actions) {
+            if ($role === 'Admin') {
+                foreach ($actions as $action) {
+                    $user->allow($action, $group);
+                }
+                break;
+            }
+        }
+
 
         return $this->edit($request, $group);
     }

@@ -20,6 +20,7 @@ class OrganizationSeeder extends Seeder
         $faker = Faker::create();
         $locations = Location::pluck('id');
         $organizationTypes = OrganizationType::pluck('id');
+        $now = now()->format('Y-m-d H:i:s');
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
                 'name' => $faker->company,

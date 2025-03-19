@@ -10,8 +10,25 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::with(['profile'])
-        ->paginate(20);
+
+        $teams = auth()->user()->teams;
+        $groups = auth()->user()->groups;
+
+        $members = [
+            ...$teams->members->pluck('id')->toArray(),
+            ...$groups->members->pluck('id')->toArray(),
+        ];
+
+        $users = User::query()
+            ->whereHas('member', function ($query) use ($members) {
+                $query->whereIn('', $members);
+            })
+            ->when($request->q, function ($query, $q) use ($request) {
+                $query->whereLike('first_name', $request->q)
+                    ->orWhereLike('last_name', $request->q)
+                    ->orWhereLike('email', $request->q);
+            })
+            ->paginate(20);
 
         return response()->json($users);
     }

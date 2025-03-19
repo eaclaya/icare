@@ -23,10 +23,10 @@ class GroupSeeder extends Seeder
         $faker = Faker::create();
 
         $types = GroupType::pluck('id');
-        $families = Family::pluck('id');
-        $pets = Pet::pluck('id');
-
-        for ($i = 0; $i < 100; $i++) {
+        $families = Family::latest('id')->take(100)->pluck('id');
+        $pets = Pet::latest('id')->take(100)->pluck('id');
+        $now = now()->format('Y-m-d H:i:s');
+        for ($i = 0; $i < 1000; $i++) {
             $index = $faker->numberBetween(0, 1);
             $groupableType = '';
             $collection = [];
@@ -43,8 +43,8 @@ class GroupSeeder extends Seeder
                 'group_type_id' => $faker->randomElement($types),
                 'groupable_id' => $faker->randomElement($collection),
                 'groupable_type' => $groupableType,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
         }
 

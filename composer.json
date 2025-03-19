@@ -27,7 +27,6 @@
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/breeze": "^2.3",
-        "laravel/dusk": "^8.3",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
@@ -36,6 +35,7 @@
         "nunomaduro/collision": "^8.1",
         "pestphp/pest": "^3.7",
         "pestphp/pest-plugin-laravel": "^3.1",
+        "pestphp/pest-plugin-stressless": "^3.1",
         "soloterm/solo": "^0.4.0"
     },
     "autoload": {

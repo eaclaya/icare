@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Organization;
 use App\Models\Team;
 use App\Models\Event;
 use App\Models\Group;
@@ -20,15 +19,16 @@ class EventSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        $organizations = Organization::pluck('id', 'id');
-        $groups = Group::pluck('id', 'id');
-        $teams = Team::pluck('id', 'id');
-        $locations = Location::pluck('id', 'id');
-        $users = User::pluck('id', 'id');
+        $groups = Group::orderBy('id', 'desc')->take(100)->pluck('id', 'id');
+        $teams = Team::orderBy('id', 'desc')->take(100)->pluck('id', 'id');
+        $locations = Location::orderBy('id', 'desc')->take(100)->pluck('id', 'id');
+        $users = User::orderBy('id', 'desc')->take(100)->pluck('id', 'id');
 
-        for ($i = 0; $i < 10; $i++) {
+        $now = now()->format('Y-m-d H:i:s');;
+        foreach (range(1, 100) as $index) {
             $data = [];
-            for ($j = 0; $j < 1000; $j++) {
+            $lastEvent = Event::latest('id')->first();
+            foreach (range(1,1000) as $index) {
                 $data[] = [
                     'name' => $faker->word,
                     'user_id' => $faker->randomElement($users),
@@ -42,41 +42,41 @@ class EventSeeder extends Seeder
                     'contact_name' => $faker->firstName,
                     'contact_phone' => $faker->phoneNumber,
                     'timezone' => $faker->timezone,
-                    'max_size' => $faker->numberBetween(1, 10),
                     'location_id' => $faker->randomElement($locations),
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
             Event::insert($data);
 
-            $data = Event::get('id')->map(function ($event) use (
-                $organizations,
-                $groups,
-                $teams,
-                $faker
-            ) {
-                $index = $faker->numberBetween(0, 2);
-                $linkableType = '';
-                $collection = [];
-                if ($index === 0) {
-                    $linkableType = "App\Models\Organization";
-                    $collection = $organizations;
-                } elseif ($index === 1) {
-                    $linkableType = "App\Models\Group";
-                    $collection = $groups;
-                } else {
-                    $linkableType = "App\Models\Team";
-                    $collection = $teams;
-                }
+            $data = Event::query()
+                ->when($lastEvent, function ($query) use ($lastEvent) {
+                    $query->where('id', '>', $lastEvent->id);
+                })
+                ->get('id')
+                ->map(function ($event) use (
+                    $groups,
+                    $teams,
+                    $faker
+                ) {
+                    $index = $faker->numberBetween(0, 1);
+                    $linkableType = '';
+                    $collection = [];
+                    if ($index === 0) {
+                        $linkableType = "App\Models\Group";
+                        $collection = $groups;
+                    } else {
+                        $linkableType = "App\Models\Team";
+                        $collection = $teams;
+                    }
 
-                return [
-                    'event_id' => $event->id,
-                    'linkable_id' => $faker->randomElement($collection),
-                    'linkable_type' => $linkableType,
-                ];
-            });
+                    return [
+                        'event_id' => $event->id,
+                        'linkable_id' => $faker->randomElement($collection),
+                        'linkable_type' => $linkableType,
+                    ];
+                });
 
             DB::table('event_links')->insert($data->toArray());
         }
