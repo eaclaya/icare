@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ChurchResource;
-use App\Models\Church;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use Typesense\Client as TypesenseClient;
 
@@ -21,14 +21,14 @@ class ChurchController extends Controller
     {
         $user = auth()->user()->load('teams.churches');
 
-        $query = Church::withCount(['members', 'teams'])
+        $query = Organization::withCount(['members', 'teams'])
             ->with(['location'])
             ->when($request->q, function ($query) use ($request) {
                 $query->whereLike('name', "%{$request->q}%");
             });
 
         // Check if the user has access to view all churches
-        if (! $user->can('view', Church::class)) {
+        if (! $user->can('view', Organization::class)) {
             $churchIds = $user->teams->pluck('churches')
                 ->flatten()
                 ->unique('id')
@@ -69,7 +69,7 @@ class ChurchController extends Controller
     }
 
 
-    public function invite(Request $request, Church $church)
+    public function invite(Request $request, Organization $church)
     {
         $data = [
             'church' => $church,
@@ -78,7 +78,7 @@ class ChurchController extends Controller
                 'method' => 'POST',
                 'data' => [
                     'invitable_id' => $church->id,
-                    'invitable_type' => Church::class,
+                    'invitable_type' => Organization::class,
                 ]
             ]
         ];
