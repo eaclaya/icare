@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Church;
+use App\Models\Organization;
 
 return [
     /*
@@ -191,7 +191,7 @@ return [
         ],
         // 'max_total_results' => env('TYPESENSE_MAX_TOTAL_RESULTS', 1000),
         'model-settings' => [
-            Church::class => [
+            Organization::class => [
                 'collection-schema' => [
                     'fields' => [
                         [

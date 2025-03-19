@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Group;
-use App\Models\Church;
+use App\Models\Organization;
 use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -16,7 +16,7 @@ class MemberPermission extends Controller
     {
         // Define resources and their actions
         $resources = [
-            'churches' => ['create' => Church::class, 'view' => Church::class, 'edit' => Church::class, 'delete' => Church::class],
+            'organizations' => ['create' => Organization::class, 'view' => Organization::class, 'edit' => Organization::class, 'delete' => Organization::class],
             'teams' => ['create' => Team::class, 'view' => Team::class, 'edit' => Team::class, 'delete' => Team::class],
             'groups' => ['create' => Group::class, 'view' => Group::class, 'edit' => Group::class, 'delete' => Group::class],
             'events' => ['create' => Event::class, 'view' => Event::class, 'edit' => Event::class, 'delete' => Event::class],

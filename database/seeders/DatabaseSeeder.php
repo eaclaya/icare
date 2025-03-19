@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             LocationSeeder::class,
             EntityTypeSeeder::class,
-            ChurchSeeder::class,
+            OrganizationSeeder::class,
             TeamSeeder::class,
             MemberSeeder::class,
             FamilySeeder::class,

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Church;
+use App\Models\Organization;
 use App\Models\Team;
 use App\Models\Event;
 use App\Models\Group;
@@ -20,7 +20,7 @@ class EventSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        $churches = Church::pluck('id', 'id');
+        $organizations = Organization::pluck('id', 'id');
         $groups = Group::pluck('id', 'id');
         $teams = Team::pluck('id', 'id');
         $locations = Location::pluck('id', 'id');
@@ -52,7 +52,7 @@ class EventSeeder extends Seeder
             Event::insert($data);
 
             $data = Event::get('id')->map(function ($event) use (
-                $churches,
+                $organizations,
                 $groups,
                 $teams,
                 $faker
@@ -61,8 +61,8 @@ class EventSeeder extends Seeder
                 $linkableType = '';
                 $collection = [];
                 if ($index === 0) {
-                    $linkableType = "App\Models\Church";
-                    $collection = $churches;
+                    $linkableType = "App\Models\Organization";
+                    $collection = $organizations;
                 } elseif ($index === 1) {
                     $linkableType = "App\Models\Group";
                     $collection = $groups;

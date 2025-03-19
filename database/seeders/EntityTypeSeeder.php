@@ -19,6 +19,11 @@ class EntityTypeSeeder extends Seeder
         ['name' => 'Pet'],
     ];
 
+    protected $organizationTypes = [
+        ['name' => 'Affiliate'],
+        ['name' => 'Church'],
+    ];
+
     /**
      * Run the database seeds.
      */
@@ -27,8 +32,8 @@ class EntityTypeSeeder extends Seeder
         try {
             DB::table('team_types')->insert($this->teamTypes);
             DB::table('group_types')->insert($this->groupTypes);
+            DB::table('organization_types')->insert($this->organizationTypes);
         } catch (\Exception $e) {
         }
-
     }
 }

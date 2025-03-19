@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Church;
+use App\Models\Organization;
 use App\Models\Member;
 use App\Models\Role;
 use App\Models\User;

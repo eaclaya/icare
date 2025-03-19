@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Church;
+use App\Models\Organization;
 use App\Models\Team;
 use App\Models\Event;
 use App\Models\Group;
@@ -14,30 +14,30 @@ class EventController extends Controller
 {
     public function index(Request $request)
     {
-        $user = auth()->user()->load('churches', 'groups', 'teams');
-        $churches = $user->churches->pluck('name', 'id');
+        $user = auth()->user()->load('organizations', 'groups', 'teams');
+        $organizations = $user->organizations->pluck('name', 'id');
         $groups = $user->groups->pluck('name', 'id');
         $teams = $user->teams->pluck('name', 'id');
 
-        $churchIds = $churches->keys()->toArray();
+        $organizationIds = $organizations->keys()->toArray();
         $groupIds = $groups->keys()->toArray();
         $teamIds = $teams->keys()->toArray();
 
         // Combine all the IDs into a single array
-        $linkableIds = array_merge($churchIds, $groupIds, $teamIds);
+        $linkableIds = array_merge($organizationIds, $groupIds, $teamIds);
 
         // Query events that have links to any of these models
         $events = Event::with(['links.linkable', 'user.profile'])
             ->whereHas('links', function ($query) use (
-                $churchIds,
+                $organizationIds,
                 $groupIds,
                 $teamIds
             ) {
                 $query
-                    ->where(function ($q) use ($churchIds) {
-                        $q->whereIn('linkable_id', $churchIds)->where(
+                    ->where(function ($q) use ($organizationIds) {
+                        $q->whereIn('linkable_id', $organizationIds)->where(
                             'linkable_type',
-                            Church::class
+                            Organization::class
                         );
                     })
                     ->orWhere(function ($q) use ($groupIds) {

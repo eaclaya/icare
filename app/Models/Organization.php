@@ -9,29 +9,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Laravel\Scout\Searchable;
 
-class Church extends Model
+class Organization extends Model
 {
     use HasApiActions, Searchable;
 
     protected $fillable = [
         'name',
-        'nickname',
-        'campus_name',
-        'street_1',
-        'street_2',
-        'city',
-        'state',
-        'zip',
-        'country',
+        'nick',
+        'campus',
         'website',
         'phone',
-        'is_campus',
         'data',
     ];
 
     protected $casts = [
         'data' => 'json',
-        'is_campus' => 'boolean',
     ];
 
     // protected function getApiActions()
@@ -73,6 +65,11 @@ class Church extends Model
         return $this->belongsTo(Location::class);
     }
 
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationType::class);
+    }
+
     public function eventLinks(): MorphMany
     {
         return $this->morphMany(EventLink::class, 'linkable');
@@ -80,7 +77,7 @@ class Church extends Model
 
     public function members(): BelongsToMany
     {
-        return $this->belongsToMany(Member::class)->withPivot(['church_type']);
+        return $this->belongsToMany(Member::class, 'organization_member')->withPivot(['organization_type']);
     }
 
     public function teams(): BelongsToMany
