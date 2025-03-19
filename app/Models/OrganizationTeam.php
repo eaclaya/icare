@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ChurchTeam extends Model
+class OrganizationTeam extends Model
 {
     //
 }

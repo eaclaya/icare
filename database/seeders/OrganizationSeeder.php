@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\Church;
+use App\Models\Organization;
+use App\Models\OrganizationType;
 use App\Models\Location;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class ChurchSeeder extends Seeder
+class OrganizationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,19 +19,23 @@ class ChurchSeeder extends Seeder
         $data = [];
         $faker = Faker::create();
         $locations = Location::pluck('id');
+        $organizationTypes = OrganizationType::pluck('id');
         $now = now()->format('Y-m-d H:i:s');
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
                 'name' => $faker->company,
-                'nickname' => $faker->company,
-                'campus_name' => $faker->company,
+                'nick' => $faker->company,
+                'campus' => $faker->company,
+                'website' => $faker->url,
+                'phone' => $faker->phoneNumber,
+                'email' => $faker->email,
                 'location_id' => $faker->randomElement($locations),
-                'created_at' => $now,
-                'updated_at' => $now,
+                'organization_type_id' => $faker->randomElement($organizationTypes),
+                'created_at' => now(),
+                'updated_at' => now(),
             ];
         }
 
-        Church::insert($data);
-
+        Organization::insert($data);
     }
 }

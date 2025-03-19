@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Church;
+use App\Models\Organization;
 use App\Models\Event;
 use App\Models\Group;
 use App\Models\Team;
@@ -43,7 +43,7 @@ class RolePermissionSeeder extends Seeder
 
         // Create Abilities (Permissions)
         $resources = [
-            'groups' => Group::class, 'teams' => Team::class, 'events' => Event::class, 'churches' => Church::class,
+            'groups' => Group::class, 'teams' => Team::class, 'events' => Event::class, 'organizations' => Organization::class,
         ];
 
         foreach ($resources as $resource => $model) {
@@ -62,7 +62,7 @@ class RolePermissionSeeder extends Seeder
             Bouncer::allow('admin')->to("view", $model);
             Bouncer::allow('admin')->to("create", $model);
                 Bouncer::allow('admin')->to("edit", $model);
-            if ($resource !== 'churches') {
+            if ($resource !== 'organizations') {
                 Bouncer::allow('admin')->to("delete", $model);
             }
         }

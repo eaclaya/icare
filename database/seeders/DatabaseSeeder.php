@@ -17,6 +17,17 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             LocationSeeder::class,
             EntityTypeSeeder::class,
+            OrganizationSeeder::class,
+            TeamSeeder::class,
+            MemberSeeder::class,
+            FamilySeeder::class,
+            PetSeeder::class,
+            GroupSeeder::class,
+            TeamMemberSeeder::class,
+            GroupMemberSeeder::class,
+            GroupTeamSeeder::class,
+            UserSeeder::class,
+            EventSeeder::class,
         ]);
 
     }

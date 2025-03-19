@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Church;
 use App\Models\Team;
 use App\Models\Event;
 use App\Models\Group;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -31,7 +29,7 @@ class EventController extends Controller
                 $teamIds
             ) {
                 $query
-                    ->Where(function ($q) use ($groupIds) {
+                    ->where(function ($q) use ($groupIds) {
                         $q->whereIn('linkable_id', $groupIds)->where(
                             'linkable_type',
                             Group::class

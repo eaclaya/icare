@@ -25,9 +25,9 @@ class Member extends Model
         return $this->hasOne(User::class, 'member_id', 'id');
     }
 
-    public function churches(): BelongsToMany
+    public function organizations(): BelongsToMany
     {
-        return $this->belongsToMany(Church::class)->withPivot(['church_type']);
+        return $this->belongsToMany(Organization::class)->withPivot(['organization_type']);
     }
 
     public function teams(): BelongsToMany

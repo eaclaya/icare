@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Church;
 use App\Models\Team;
 use App\Models\Event;
 use App\Models\Group;
@@ -81,7 +80,5 @@ class EventSeeder extends Seeder
 
             DB::table('event_links')->insert($data->toArray());
         }
-
-
     }
 }
